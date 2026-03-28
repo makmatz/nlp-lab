@@ -1,10 +1,33 @@
+import torch
 from torch.utils.data import Dataset
 from tqdm import tqdm
+from ekphrasis.classes.preprocessor import TextPreProcessor
+from ekphrasis.classes.tokenizer import SocialTokenizer
+from ekphrasis.dicts.emoticons import emoticons
+
+text_processor = TextPreProcessor(
+    normalize=['url', 'email', 'phone', 'user'],
+    annotate={"hashtag", "elongated", "allcaps"},
+    fix_html=True,
+    segmenter="twitter",
+    corrector="twitter",
+    unpack_hashtags=True,
+    unpack_contractions=True,
+    spell_correct_elong=False,
+    tokenizer=SocialTokenizer(lowercase=True).tokenize,
+    dicts=[emoticons]
+)
 
 """
-MR: max = 59, mean = 21, median = 20, 90th = 34 => choice = 35
+Sentence length statistics (in tokens) on training set:
+         max   mean  median  90th  => MAX_LENGTH
+MR:       59   21.0    20.0    34  =>     35
+Semeval:  67   25.4    26.0    34  =>     35
 """
-MAX_LENGTH = 35
+MAX_LENGTH = {
+    'MR': 35,
+    'Semeval2017A': 35,
+}
 
 class SentenceDataset(Dataset):
     """
@@ -18,7 +41,7 @@ class SentenceDataset(Dataset):
             processed data-item from our dataset with a given index
     """
 
-    def __init__(self, X, y, word2idx):
+    def __init__(self, X, y, word2idx, dataset='MR'):
         """
         In the initialization of the dataset we will have to assign the
         input values to the corresponding class attributes
@@ -33,11 +56,17 @@ class SentenceDataset(Dataset):
             X (list): List of training samples
             y (list): List of training labels
             word2idx (dict): a dictionary which maps words to indexes
+            dataset (str): the dataset name ('MR' or 'Semeval2017A')
         """
 
-        self.data = [paragraph.split() for paragraph in X]
-        self.target = y
+        self.max_length = MAX_LENGTH[dataset]
+        self.labels = y
         self.word2idx = word2idx
+
+        if dataset == 'MR':
+            self.data = [sentence.lower().split() for sentence in X]
+        elif dataset == 'Semeval2017A':
+            self.data = [text_processor.pre_process_doc(sentence) for sentence in X]
 
     def __len__(self):
         """
@@ -78,15 +107,15 @@ class SentenceDataset(Dataset):
 
         fallback = self.word2idx['<unk>']
         indices = [self.word2idx.get(word, fallback) for word in self.data[index]]
-        label = self.target[index]
+        label = self.labels[index]
         length = len(self.data[index])
 
-        if length > MAX_LENGTH:
-            indices = indices[:MAX_LENGTH]
-            length = MAX_LENGTH
+        if length > self.max_length:
+            indices = indices[:self.max_length]
+            length = self.max_length
         else:
-            indices += [0] * (MAX_LENGTH - length)
+            indices += [0] * (self.max_length - length)
 
-        return indices, label, length
+        return torch.tensor(indices), torch.tensor(label), torch.tensor(length)
         
 
