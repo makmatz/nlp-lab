@@ -54,12 +54,36 @@ else:
     raise ValueError("Invalid dataset")
 
 # convert data labels from strings to integers
-y_train = ...  # EX1
-y_test = ...  # EX1
-n_classes = ...  # EX1 - LabelEncoder.classes_.size
+original_labels = y_train[:10]
+
+label_encoder = LabelEncoder()
+label_encoder.fit(y_train)
+
+y_train = label_encoder.transform(y_train)
+y_test = label_encoder.transform(y_test)
+n_classes = label_encoder.classes_.size
+
+encoded_labels = y_train[:10]
+
+print('\nFirst 10 labels of the training set:')
+for org, enc in zip(original_labels, encoded_labels):
+    print(f"{org!r:12} -> {enc}")
 
 # Define our PyTorch-based Dataset
 train_set = SentenceDataset(X_train, y_train, word2idx)
+
+print('\nFirst 10 training examples:')
+for i in range(10):
+    print(f"[{i}] words={train_set.data[i]}, label={train_set.labels[i]}")
+    print()
+
+print('\nFirst 5 training examples (original vs encoded):')
+for i in range(5):
+    example, label, length = train_set[i]
+    print(f"Original : {X_train[i]}")
+    print(f"Encoded  : example={example}, label={label}, length={length}")
+    print()
+
 test_set = SentenceDataset(X_test, y_test, word2idx)
 
 # EX7 - Define our PyTorch-based DataLoader

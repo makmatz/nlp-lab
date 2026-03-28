@@ -24,22 +24,26 @@ class BaselineDNN(nn.Module):
 
         super(BaselineDNN, self).__init__()
 
+        hidden_size = 128
+
         # 1 - define the embedding layer
-        ...  # EX4
+        num_embeddings, dim = np.array(embeddings).shape
+        self.embedding = nn.Embedding(num_embeddings, dim)
 
         # 2 - initialize the weights of our Embedding layer
         # from the pretrained word embeddings
-        ...  # EX4
+        self.embedding.weight.data.copy_(torch.Tensor(embeddings))
 
         # 3 - define if the embedding layer will be frozen or finetuned
-        ...  # EX4
+        self.embedding.weight.requires_grad = trainable_emb
 
         # 4 - define a non-linear transformation of the representations
-        ...  # EX5
+        self.linear = nn.Linear(dim, hidden_size)
+        self.relu = nn.ReLU()
 
         # 5 - define the final Linear layer which maps
         # the representations to the classes
-        ...  # EX5
+        self.output = nn.Linear(hidden_size, output_size)
 
     def forward(self, x, lengths):
         """
@@ -51,16 +55,17 @@ class BaselineDNN(nn.Module):
         """
 
         # 1 - embed the words, using the embedding layer
-        embeddings = ...  # EX6
+        embeddings = self.embedding(x)
 
         # 2 - construct a sentence representation out of the word embeddings
-        representations = ...  # EX6
+        representations = embeddings.sum(dim=1) / lengths.float().unsqueeze(1)
 
         # 3 - transform the representations to new ones.
-        representations = ...  # EX6
+        representations = self.linear(representations)
+        representations = self.relu(representations)
 
         # 4 - project the representations to classes using a linear layer
-        logits = ...  # EX6
+        logits = self.output(representations)
 
         return logits
 

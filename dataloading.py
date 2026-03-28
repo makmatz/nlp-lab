@@ -1,6 +1,10 @@
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
+"""
+MR: max = 59, mean = 21, median = 20, 90th = 34 => choice = 35
+"""
+MAX_LENGTH = 35
 
 class SentenceDataset(Dataset):
     """
@@ -31,12 +35,9 @@ class SentenceDataset(Dataset):
             word2idx (dict): a dictionary which maps words to indexes
         """
 
-        # self.data = X
-        # self.labels = y
-        # self.word2idx = word2idx
-
-        # EX2
-        raise NotImplementedError
+        self.data = [paragraph.split() for paragraph in X]
+        self.target = y
+        self.word2idx = word2idx
 
     def __len__(self):
         """
@@ -75,8 +76,17 @@ class SentenceDataset(Dataset):
                 length = 4
         """
 
-        # EX3
+        fallback = self.word2idx['<unk>']
+        indices = [self.word2idx.get(word, fallback) for word in self.data[index]]
+        label = self.target[index]
+        length = len(self.data[index])
 
-        # return example, label, length
-        raise NotImplementedError
+        if length > MAX_LENGTH:
+            indices = indices[:MAX_LENGTH]
+            length = MAX_LENGTH
+        else:
+            indices += [0] * (MAX_LENGTH - length)
+
+        return indices, label, length
+        
 
