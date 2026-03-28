@@ -1,3 +1,5 @@
 .idea/
 solutions/
 embeddings/
+__pycache__/
+*.pyc
