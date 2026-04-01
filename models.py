@@ -12,7 +12,7 @@ class BaselineDNN(nn.Module):
        to the number of classes.ngth)
     """
 
-    def __init__(self, output_size, embeddings, trainable_emb=False):
+    def __init__(self, output_size, hidden_size, embeddings, trainable_emb=False):
         """
 
         Args:
@@ -23,8 +23,6 @@ class BaselineDNN(nn.Module):
         """
 
         super(BaselineDNN, self).__init__()
-
-        hidden_size = 128
 
         # 1 - define the embedding layer
         num_embeddings, dim = np.array(embeddings).shape

@@ -33,8 +33,8 @@ EMBEDDINGS = os.path.join(EMB_PATH, "glove.twitter.27B.200d.txt")
 # 2 - set the correct dimensionality of the embeddings
 EMB_DIM = 200
 
-EMB_TRAINABLE = True
-BATCH_SIZE = 128
+EMB_TRAINABLE = False
+BATCH_SIZE = 64
 EPOCHS = 50
 DATASET = "Semeval2017A"  # options: "MR", "Semeval2017A"
 
@@ -97,7 +97,8 @@ test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False)
 #############################################################################
 # Model Definition (Model, Loss Function, Optimizer)
 #############################################################################
-model = BaselineDNN(output_size=1 if n_classes==2 else n_classes,  
+model = BaselineDNN(output_size=1 if n_classes==2 else n_classes,
+                    hidden_size=64,  
                     embeddings=embeddings,
                     trainable_emb=EMB_TRAINABLE)
 

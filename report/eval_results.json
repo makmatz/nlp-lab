@@ -22,15 +22,15 @@
     "hyperparams": {
       "emb_dim": 200,
       "emb_trainable": false,
-      "batch_size": 128,
-      "epochs_trained": 7,
+      "batch_size": 64,
+      "epochs_trained": 10,
       "hidden_size": 256,
       "embeddings": "glove.twitter.27B.200d.txt"
     },
     "metrics": {
-      "accuracy": 0.6378215564962553,
-      "f1": 0.6310353657594879,
-      "recall": 0.6296388570897568
+      "accuracy": 0.6518235102572452,
+      "f1": 0.6431289135246399,
+      "recall": 0.6451810363743441
     }
   }
 }
