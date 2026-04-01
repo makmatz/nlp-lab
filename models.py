@@ -4,65 +4,41 @@ from torch import nn
 
 
 class BaselineDNN(nn.Module):
-    """
-    1. We embed the words in the input texts using an embedding layer
-    2. We compute the min, mean, max of the word embeddings in each sample
-       and use it as the feature representation of the sequence.
-    4. We project with a linear layer the representation
-       to the number of classes.ngth)
-    """
+    def __init__(self, output_size, embeddings, trainable_emb=False, pooling='mean'):
 
-    def __init__(self, output_size, hidden_size, embeddings, trainable_emb=False):
-        """
-
-        Args:
-            output_size(int): the number of classes
-            embeddings(bool):  the 2D matrix with the pretrained embeddings
-            trainable_emb(bool): train (finetune) or freeze the weights
-                the embedding layer
-        """
+        if pooling not in ['mean', 'mean_max']:
+            raise ValueError("Invalid pooling method.")
 
         super(BaselineDNN, self).__init__()
+        self.hiddel_size = 100
+        self.pooling = pooling
+        _, dim = np.array(embeddings).shape
 
-        # 1 - define the embedding layer
-        num_embeddings, dim = np.array(embeddings).shape
-        self.embedding = nn.Embedding(num_embeddings, dim)
+        if pooling == 'mean_max':
+            dim *= 2
 
-        # 2 - initialize the weights of our Embedding layer
-        # from the pretrained word embeddings
-        self.embedding.weight.data.copy_(torch.Tensor(embeddings))
-
-        # 3 - define if the embedding layer will be frozen or finetuned
+        self.embedding = nn.Embedding.from_pretrained(torch.FloatTensor(embeddings))
         self.embedding.weight.requires_grad = trainable_emb
 
-        # 4 - define a non-linear transformation of the representations
-        self.linear = nn.Linear(dim, hidden_size)
+        self.linear = nn.Linear(dim, self.hidden_size)
         self.relu = nn.ReLU()
 
-        # 5 - define the final Linear layer which maps
-        # the representations to the classes
-        self.output = nn.Linear(hidden_size, output_size)
+        self.output = nn.Linear(self.hidden_size, output_size)
 
     def forward(self, x, lengths):
-        """
-        This is the heart of the model.
-        This function, defines how the data passes through the network.
-
-        Returns: the logits for each class
-
-        """
-
-        # 1 - embed the words, using the embedding layer
+        
         embeddings = self.embedding(x)
 
-        # 2 - construct a sentence representation out of the word embeddings
-        representations = embeddings.sum(dim=1) / lengths.float().unsqueeze(1)
+        if self.pooling == 'mean':
+            representations = embeddings.sum(dim=1) / lengths.float().unsqueeze(1)
+        elif self.pooling == 'mean_max':
+            mean_rep = embeddings.sum(dim=1) / lengths.float().unsqueeze(1)
+            max_rep = embeddings.max(dim=1).values
+            representations = torch.cat([mean_rep, max_rep], dim=1)
 
-        # 3 - transform the representations to new ones.
         representations = self.linear(representations)
         representations = self.relu(representations)
 
-        # 4 - project the representations to classes using a linear layer
         logits = self.output(representations)
 
         return logits
