@@ -71,7 +71,7 @@ class LSTM(nn.Module):
         self.linear = nn.Linear(self.representation_size, output_size)
 
     def forward(self, x, lengths):
-        batch_size, max_length = x.shape
+        batch_size, _ = x.shape
         embeddings = self.embeddings(x)
         X = torch.nn.utils.rnn.pack_padded_sequence(
             embeddings, lengths, batch_first=True, enforce_sorted=False)
@@ -82,8 +82,7 @@ class LSTM(nn.Module):
         ht, _ = torch.nn.utils.rnn.pad_packed_sequence(ht, batch_first=True)
 
         # pick the output of the lstm corresponding to the last word
-        # TODO: Main-Lab-Q2 (Hint: take actual lengths into consideration)
-        representations = ...
+        representations = ht[torch.arange(batch_size), lengths - 1]
 
         logits = self.linear(representations)
 

@@ -2,4 +2,4 @@
 solutions/
 embeddings/
 __pycache__/
-*.pyc
+best_model.pt
