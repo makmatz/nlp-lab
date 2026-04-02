@@ -12,6 +12,7 @@ from config import EMB_PATH
 from dataloading import SentenceDataset
 from early_stopper import EarlyStopper
 from models import BaselineDNN, LSTM
+from attention import SimpleSelfAttentionModel
 from training import train_dataset, eval_dataset, get_metrics_report, torch_train_val_split
 from utils.load_datasets import load_MR, load_Semeval2017A
 from utils.load_embeddings import load_word_vectors
@@ -78,10 +79,15 @@ test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False)
 # Model Definition, Training, and Evaluation
 #############################################################################
 
-model = LSTM(output_size=1 if n_classes == 2 else n_classes,
-                    embeddings=embeddings,
-                    trainable_emb=EMB_TRAINABLE,
-                    bidirectional=True)
+# model = LSTM(output_size=1 if n_classes == 2 else n_classes,
+#                     embeddings=embeddings,
+#                     trainable_emb=EMB_TRAINABLE,
+#                     bidirectional=True)
+
+model = SimpleSelfAttentionModel(output_size=1 if n_classes == 2 else n_classes,
+                                embeddings=embeddings,
+                                max_length=60)
+
 model.to(DEVICE)
 print(model)
 
@@ -103,11 +109,9 @@ for epoch in range(1, EPOCHS + 1):
 
     train_loss, _ = eval_dataset(train_loader, model, criterion)
     val_loss, _ = eval_dataset(val_loader, model, criterion)
-    test_loss, _ = eval_dataset(test_loader, model, criterion)
 
     train_losses.append(train_loss)
     val_losses.append(val_loss)
-    test_losses.append(test_loss)
 
     if early_stopper.early_stop(val_loss):
         print(f"Early stopping at epoch {epoch}")
@@ -116,8 +120,8 @@ for epoch in range(1, EPOCHS + 1):
 # Load best model before evaluating
 model.load_state_dict(torch.load('best_model.pt'))
 
-train_loss, (y_train_pred, y_train_gold) = eval_dataset(train_loader, model, criterion)
-test_loss, (y_test_pred, y_test_gold) = eval_dataset(test_loader, model, criterion)
+_, (y_train_pred, y_train_gold) = eval_dataset(train_loader, model, criterion)
+_, (y_test_pred, y_test_gold) = eval_dataset(test_loader, model, criterion)
 
 print(f"\n{'='*50}")
 print(f"Final Metrics on {DATASET}:")
@@ -128,7 +132,6 @@ print(f"\nTest set:\n{get_metrics_report(y_test_gold, y_test_pred)}")
 plt.figure(figsize=(8, 5))
 plt.plot(range(1, len(train_losses) + 1), train_losses, label='Train Loss')
 plt.plot(range(1, len(val_losses) + 1), val_losses, label='Val Loss')
-plt.plot(range(1, len(test_losses) + 1), test_losses, label='Test Loss')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.title(f'Training, Validation and Test Loss')

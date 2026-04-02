@@ -68,19 +68,16 @@ class SimpleSelfAttentionModel(nn.Module):
         self.ln1 = nn.LayerNorm(dim)
         self.ln2 = nn.LayerNorm(dim)
 
-        # TODO: Main-lab-Q3 - define output classification layer
-        self.output = ...
+        self.output = nn.Linear(dim, output_size)
 
-    def forward(self, x):
+    def forward(self, x, lengths=None):
         B, T = x.shape
         tok_emb = self.token_embedding_table(x)  # (B,T,C)
         pos_emb = self.position_embedding_table(torch.arange(T))  # (T,C)
         x = tok_emb + pos_emb  # (B,T,C)
         x = x + self.sa(self.ln1(x))
         x = x + self.ffwd(self.ln2(x))
-
-        # TODO: Main-lab-Q3 - avg pooling to get a sentence embedding
-        x = ...  # (B,C)
+        x = x.mean(dim=1)  # (B,C)
 
         logits = self.output(x)  # (C,output)
         return logits
