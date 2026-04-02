@@ -158,22 +158,30 @@ class TransformerEncoderModel(nn.Module):
     def __init__(self, output_size, embeddings, max_length=60, n_head=3, n_layer=3):
         super().__init__()
 
-        # TODO: Main-Lab-Q5 - define the model
-        # Hint: it will be similar to `MultiHeadAttentionModel` but now
-        # there are blocks of MultiHeadAttention modules as defined below
-        ...
+        self.n_head = n_head
+        self.max_length = max_length
+        embeddings = np.array(embeddings)
 
-        num_embeddings, dim = ...
+        num_embeddings, dim = embeddings.shape
+        self.token_embedding_table = nn.Embedding(num_embeddings, dim)
+        self.token_embedding_table = self.token_embedding_table.from_pretrained(
+            torch.Tensor(embeddings), freeze=True)
+        self.position_embedding_table = nn.Embedding(self.max_length, dim)
 
         head_size = dim // self.n_head
         self.blocks = nn.Sequential(
             *[Block(n_head, head_size, dim) for _ in range(n_layer)])
         self.ln_f = nn.LayerNorm(dim)  # final layer norm
 
-        self.output = ...
+        self.output = nn.Linear(dim, output_size)
 
-    def forward(self, x):
-        ...
-
-        logits = ...
+    def forward(self, x, lengths=None):
+        B, T = x.shape
+        tok_emb = self.token_embedding_table(x) # (B, T, C)
+        pos_emb = self.position_embedding_table(torch.arange(T))  # (T,C)
+        x = tok_emb + pos_emb # (B, T, C)
+        x = self.blocks(x)
+        x = self.ln_f(x)
+        x = x.mean(dim=1)          # (B, C)
+        logits = self.output(x)    # (B, output_size)
         return logits

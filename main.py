@@ -12,7 +12,7 @@ from config import EMB_PATH
 from dataloading import SentenceDataset
 from early_stopper import EarlyStopper
 from models import BaselineDNN, LSTM
-from attention import SimpleSelfAttentionModel, MultiHeadAttentionModel
+from attention import SimpleSelfAttentionModel, MultiHeadAttentionModel, TransformerEncoderModel
 from training import train_dataset, eval_dataset, get_metrics_report, torch_train_val_split
 from utils.load_datasets import load_MR, load_Semeval2017A
 from utils.load_embeddings import load_word_vectors
@@ -27,10 +27,10 @@ warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 # for example http://nlp.stanford.edu/data/glove.6B.zip
 
 # 1 - point to the pretrained embeddings file (must be in /embeddings folder)
-EMBEDDINGS = os.path.join(EMB_PATH, "glove.6B.200d.txt")
+EMBEDDINGS = os.path.join(EMB_PATH, "glove.6B.300d.txt")
 
 # 2 - set the correct dimensionality of the embeddings
-EMB_DIM = 200
+EMB_DIM = 300
 
 EMB_TRAINABLE = False
 BATCH_SIZE = 128
@@ -88,10 +88,16 @@ test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False)
 #                                 embeddings=embeddings,
 #                                 max_length=60)
 
-model = MultiHeadAttentionModel(output_size=1 if n_classes == 2 else n_classes,
+# model = MultiHeadAttentionModel(output_size=1 if n_classes == 2 else n_classes,
+#                                 embeddings=embeddings,
+#                                 max_length=60,
+#                                 n_head=5)
+
+model = TransformerEncoderModel(output_size=1 if n_classes == 2 else n_classes,
                                 embeddings=embeddings,
                                 max_length=60,
-                                n_head=5)
+                                n_head=4,
+                                n_layer=3)
 
 model.to(DEVICE)
 print(model)
