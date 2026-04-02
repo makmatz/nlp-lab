@@ -1,8 +1,11 @@
+import torch
 from transformers import pipeline
 from sklearn.preprocessing import LabelEncoder
 from tqdm import tqdm
 from utils.load_datasets import load_MR, load_Semeval2017A
 from training import get_metrics_report
+
+DEVICE = 0 if torch.cuda.is_available() else -1
 
 LABELS_MAPPING = {
     # --- MR models (binary: positive / negative) ---
@@ -89,7 +92,7 @@ if __name__ == '__main__':
 
         for PRETRAINED_MODEL in models:
             print(f'\nRunning {PRETRAINED_MODEL} on {DATASET}...')
-            sentiment_pipeline = pipeline("sentiment-analysis", model=PRETRAINED_MODEL)
+            sentiment_pipeline = pipeline("sentiment-analysis", model=PRETRAINED_MODEL, device=DEVICE)
 
             y_pred = []
             for x in tqdm(X_test):
