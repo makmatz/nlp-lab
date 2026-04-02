@@ -1,6 +1,11 @@
 import argparse
 import os
 import warnings
+import matplotlib
+import sys
+
+if '--no_show' in sys.argv:
+    matplotlib.use('Agg')
 
 import matplotlib.pyplot as plt
 import numpy as np

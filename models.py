@@ -10,7 +10,7 @@ class BaselineDNN(nn.Module):
             raise ValueError("Invalid pooling method.")
 
         super(BaselineDNN, self).__init__()
-        self.hiddel_size = 100
+        self.hidden_size = 100
         self.pooling = pooling
         _, dim = np.array(embeddings).shape
 
