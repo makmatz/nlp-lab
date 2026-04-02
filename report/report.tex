@@ -1,0 +1,506 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[greek,english]{babel}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{placeins}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage{float}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{orange},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  breaklines=true,
+  frame=single,
+  showstringspaces=false,
+  language=Python
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=cyan
+}
+
+\title{
+  \textbf{\foreignlanguage{english}{SLP-NLP Lab 2}}\\[0.5em]
+  \large Επεξεργασία Φωνής και Φυσικής Γλώσσας\\
+  Εαρινό Εξάμηνο 2025-26
+}
+\author{Μαντζώρος Γεράσιμος, Παπαδημητρίου Νίκη}
+\date{Απρίλιος 2026}
+
+\begin{document}
+
+\selectlanguage{greek}
+
+\maketitle
+\tableofcontents
+\newpage
+
+% ============================================================
+%  ΜΕΡΟΣ Α: ΠΡΟΠΑΡΑΣΚΕΥΗ
+% ============================================================
+\phantomsection
+\section*{Μέρος Α΄: Προπαρασκευή}
+\addcontentsline{toc}{section}{Μέρος Α΄: Προπαρασκευή}
+
+Για τα ζητούμενα της προπαρασκευής χρησιμοποιήσαμε το \textbf{\textlatin{[Sentence Polarity Dataset / Semeval 2017 Task4-A]}}
+% TODO: επιλέξτε ένα dataset και διαγράψτε το άλλο
+
+\phantomsection
+\subsection*{Ζητούμενο 1 -- Κωδικοποίηση Επισημειώσεων}
+\addcontentsline{toc}{subsection}{Ζητούμενο 1 -- Κωδικοποίηση Επισημειώσεων}
+
+% Εκτυπώστε τα πρώτα 10 labels από τα δεδομένα εκπαίδευσης και τις αντιστοιχίες τους σε αριθμούς.
+
+\begin{lstlisting}[caption={\textlatin{Έξοδος Ζητούμενου 1 (main.py:EX1)}}]
+% TODO: Επικολλήστε εδώ την έξοδο της εκτύπωσης των 10 πρώτων labels
+\end{lstlisting}
+
+\phantomsection
+\subsection*{Ζητούμενο 2 -- Λεκτική Ανάλυση (\textlatin{Tokenization})}
+\addcontentsline{toc}{subsection}{Ζητούμενο 2 -- Λεκτική Ανάλυση (Tokenization)}
+
+% Εκτυπώστε τα πρώτα 10 παραδείγματα από τα δεδομένα εκπαίδευσης (dataloading.py:EX2).
+
+\begin{lstlisting}[caption={Έξοδος Ζητούμενου 2 (dataloading.py:EX2)}]
+% TODO: Επικολλήστε εδώ την έξοδο των 10 πρώτων tokenized παραδειγμάτων
+\end{lstlisting}
+
+\phantomsection
+\subsection*{Ζητούμενο 3 -- Κωδικοποίηση Παραδειγμάτων (Λέξεων)}
+\addcontentsline{toc}{subsection}{Ζητούμενο 3 -- Κωδικοποίηση Παραδειγμάτων}
+
+% Υλοποίηση __getitem__ της κλάσης SentenceDataset (dataloading.py:EX3)
+% Εκτυπώστε 5 παραδείγματα στην αρχική τους μορφή και όπως τα επιστρέφει η κλάση.
+
+\begin{lstlisting}[caption={Έξοδος Ζητούμενου 3 (dataloading.py:EX3)}]
+% TODO: Επικολλήστε εδώ τα 5 παραδείγματα όπως τα επιστρέφει η SentenceDataset
+\end{lstlisting}
+
+\phantomsection
+\subsection*{Ζητούμενο 4 -- \textlatin{Embedding Layer}}
+\addcontentsline{toc}{subsection}{Ζητούμενο 4 -- Embedding Layer}
+
+% Συμπληρώστε τα κενά στις θέσεις models.py:EX4
+% Απαντήστε στα παρακάτω ερωτήματα:
+
+\paragraph{Γιατί αρχικοποιούμε το \textlatin{embedding layer} με τα προ-εκπαιδευμένα \textlatin{word embeddings};}
+
+% TODO: Η αρχικοποίηση με προ-εκπαιδευμένα embeddings δίνει στο μοντέλο ...
+
+\paragraph{Γιατί κρατάμε παγωμένα τα βάρη του \textlatin{embedding layer} κατά την εκπαίδευση;}
+
+% TODO: Παγώνοντας τα βάρη αποφεύγουμε ...
+
+\phantomsection
+\subsection*{Ζητούμενο 5 -- \textlatin{Output Layer(s)}}
+\addcontentsline{toc}{subsection}{Ζητούμενο 5 -- Output Layer(s)}
+
+% Συμπληρώστε τα κενά στις θέσεις models.py:EX5
+% Απαντήστε στα παρακάτω ερωτήματα:
+
+\paragraph{Γιατί βάζουμε μη γραμμική συνάρτηση ενεργοποίησης στο προτελευταίο \textlatin{layer};}
+
+% TODO: ...
+
+\paragraph{Τι διαφορά θα είχε αν είχαμε 2 ή περισσότερους γραμμικούς μετασχηματισμούς στη σειρά;}
+
+% TODO: ...
+
+\phantomsection
+\subsection*{Ζητούμενο 6 -- \textlatin{Forward Pass}}
+\addcontentsline{toc}{subsection}{Ζητούμενο 6 -- Forward Pass}
+
+% Συμπληρώστε τα κενά στις θέσεις models.py:EX6 στη μέθοδο __forward__
+% Απαντήστε στα παρακάτω ερωτήματα:
+
+\paragraph{Διαισθητική ερμηνεία της αναπαράστασης κέντρο-βάρους:}
+
+% TODO: ...
+
+\paragraph{Πιθανές αδυναμίες της προσέγγισης για αναπαράσταση κειμένων:}
+
+% TODO: ...
+
+\phantomsection
+\subsection*{Ζητούμενο 7 -- \textlatin{DataLoaders}}
+\addcontentsline{toc}{subsection}{Ζητούμενο 7 -- DataLoaders}
+
+% Συμπληρώστε τα κενά στις θέσεις main.py:EX7
+% Απαντήστε στα παρακάτω ερωτήματα:
+
+\paragraph{Συνέπειες μικρών και μεγάλων \textlatin{mini-batches} στην εκπαίδευση:}
+
+% TODO: ...
+
+\paragraph{Γιατί ανακατεύουμε τη σειρά των \textlatin{mini-batches} σε κάθε εποχή;}
+
+% TODO: ...
+
+\phantomsection
+\subsection*{Ζητούμενο 8 -- Βελτιστοποίηση}
+\addcontentsline{toc}{subsection}{Ζητούμενο 8 -- Βελτιστοποίηση}
+
+% Συμπληρώστε τα κενά στις θέσεις main.py:EX8
+% Αναφέρετε τις επιλογές σας (κριτήριο, παράμετροι, optimizer) και αιτιολογήστε.
+
+\paragraph{Κριτήριο (\textlatin{Loss}):} % TODO: BCEWithLogitsLoss / CrossEntropyLoss -- γιατί;
+
+\paragraph{\textlatin{Optimizer}:} % TODO: Adam / Adagrad / RMSProp -- γιατί;
+
+\paragraph{Υπερπαράμετροι:}
+\begin{itemize}
+  \item \textlatin{Learning rate}: % TODO
+  \item \textlatin{Batch size}: % TODO
+  \item Εποχές: % TODO
+  \item Άλλες: % TODO
+\end{itemize}
+
+\phantomsection
+\subsection*{Ζητούμενο 9 -- Εκπαίδευση}
+\addcontentsline{toc}{subsection}{Ζητούμενο 9 -- Εκπαίδευση}
+
+% Συμπληρώστε τα κενά στις θέσεις training.py:EX9.
+
+\begin{lstlisting}[caption={Σύνοψη εκπαίδευσης}]
+% TODO: Επικολλήστε σύνοψη εκπαίδευσης (π.χ. loss ανά εποχή)
+\end{lstlisting}
+
+\phantomsection
+\subsection*{Ζητούμενο 10 -- Αξιολόγηση \textlatin{Baseline} Μοντέλου}
+\addcontentsline{toc}{subsection}{Ζητούμενο 10 -- Αξιολόγηση Baseline Μοντέλου}
+
+% Για κάθε ένα από τα 2 datasets, αναφέρετε accuracy, F1-score (macro), recall (macro).
+% Δημιουργήστε γραφικές παραστάσεις training/test loss ανά εποχή.
+
+\begin{table}[H]
+  \centering
+  \caption{Αποτελέσματα \textlatin{Baseline} μοντέλου}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{\textlatin{Dataset}} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
+    \midrule
+    \textlatin{Sentence Polarity} & -- & -- & -- \\
+    \textlatin{Semeval 2017}      & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  % \includegraphics[width=0.8\textwidth]{figures/loss_curve_baseline.png}
+  \caption{Καμπύλες εκπαίδευσης (\textlatin{training \& test loss}) ανά εποχή -- \textlatin{Baseline}}
+  \label{fig:loss_baseline}
+\end{figure}
+
+\phantomsection
+\subsection*{Ζητούμενο 11 -- Κατηγοριοποίηση με Χρήση \textlatin{LLM}}
+\addcontentsline{toc}{subsection}{Ζητούμενο 11 -- Κατηγοριοποίηση με Χρήση LLM}
+
+% Επιλέξτε τουλάχιστον 20 κείμενα από κάθε κατηγορία και χρησιμοποιήστε το ChatGPT.
+
+\paragraph{\textlatin{Prompts} που χρησιμοποιήθηκαν:}
+
+% TODO: Περιγράψτε τα prompts που δοκιμάσατε
+
+\paragraph{Επίδοση μοντέλου:}
+
+\begin{table}[H]
+  \centering
+  \caption{Αποτελέσματα \textlatin{ChatGPT}}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{\textlatin{Dataset}} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
+    \midrule
+    \textlatin{Sentence Polarity} & -- & -- & -- \\
+    \textlatin{Semeval 2017}      & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{Ανάλυση αποτελεσμάτων:}
+
+% TODO: Έκανε κάποιο λάθος; Ποιες λέξεις ήταν σημαντικότερες για το συναίσθημα;
+
+% ============================================================
+%  ΜΕΡΟΣ Β: ΚΥΡΙΑ ΑΣΚΗΣΗ
+% ============================================================
+\newpage
+\phantomsection
+\section*{Μέρος Β΄: Κύρια Άσκηση}
+\addcontentsline{toc}{section}{Μέρος Β΄: Κύρια Άσκηση}
+
+Για τα ερωτήματα 1--5 χρησιμοποιήσαμε το \textbf{\textlatin{[Sentence Polarity Dataset / Semeval 2017 Task4-A]}}.
+% TODO: επιλέξτε ένα dataset
+
+\phantomsection
+\subsection*{Ερώτημα 1 -- \textlatin{Mean + Max Pooling}}
+\addcontentsline{toc}{subsection}{Ερώτημα 1 -- Mean + Max Pooling}
+
+\paragraph{1.1 Υλοποίηση:}
+
+% Υπολογισμός αναπαράστασης u = [mean(E) || max(E)]
+
+\paragraph{1.2 Διαφορές από την αρχική αναπαράσταση:}
+
+% TODO: Τι παραπάνω πληροφορία αποτυπώνει η συνένωση mean + max pooling;
+
+\begin{table}[H]
+  \centering
+  \caption{Αποτελέσματα Ερωτήματος 1 (\textlatin{Mean+Max Pooling})}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
+    \midrule
+    \textlatin{Mean+Max Pooling} & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\phantomsection
+\subsection*{Ερώτημα 2 -- \textlatin{LSTM}}
+\addcontentsline{toc}{subsection}{Ερώτημα 2 -- LSTM}
+
+\paragraph{2.1 \textlatin{Validation set \& Early Stopping}:}
+
+% TODO: Περιγράψτε τη χρήση EarlyStopper (early stopping μετά από 5 εποχές αύξησης validation loss)
+
+\paragraph{2.2 Χρήση τελευταίας εξόδου \textlatin{LSTM} ($h_N$):}
+
+% TODO: Αποτελέσματα με τη χρήση h_N (χωρίς zero-padded timesteps)
+
+\paragraph{2.3 Αμφίδρομο \textlatin{LSTM (BiLSTM)}:}
+
+% TODO: Αποτελέσματα με bidirectional=True
+
+\begin{table}[H]
+  \centering
+  \caption{Αποτελέσματα Ερωτήματος 2 (\textlatin{LSTM})}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
+    \midrule
+    \textlatin{LSTM (unidirectional)}  & -- & -- & -- \\
+    \textlatin{BiLSTM}                 & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  % \includegraphics[width=0.8\textwidth]{figures/loss_curve_lstm.png}
+  \caption{Καμπύλες εκπαίδευσης \textlatin{LSTM}}
+  \label{fig:loss_lstm}
+\end{figure}
+
+\phantomsection
+\subsection*{Ερώτημα 3 -- \textlatin{Self-Attention}}
+\addcontentsline{toc}{subsection}{Ερώτημα 3 -- Self-Attention}
+
+\paragraph{3.1 Υλοποίηση \& Αποτελέσματα (\textlatin{SimpleSelfAttentionModel}):}
+
+% TODO: Συμπληρώστε τα κενά στο attention.SimpleSelfAttentionModel
+% Εφαρμόστε average-pooling πριν το τελευταίο layer
+
+\begin{table}[H]
+  \centering
+  \caption{Αποτελέσματα Ερωτήματος 3 (\textlatin{Self-Attention})}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
+    \midrule
+    \textlatin{Self-Attention} & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{3.2 \textlatin{Queries, Keys, Values} και \textlatin{Position Embeddings}:}
+
+% TODO: Τι είναι τα queries, keys, values στην κλάση attention.Head;
+% Τι είναι τα position_embeddings στο SimpleSelfAttentionModel;
+
+\phantomsection
+\subsection*{Ερώτημα 4 -- \textlatin{Multi-Head Attention}}
+\addcontentsline{toc}{subsection}{Ερώτημα 4 -- Multi-Head Attention}
+
+% Συμπληρώστε τα κενά στο attention.MultiHeadAttentionModel
+% Βασιστείτε στο SimpleSelfAttentionModel
+
+\begin{table}[H]
+  \centering
+  \caption{Αποτελέσματα Ερωτήματος 4 (\textlatin{Multi-Head Attention})}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
+    \midrule
+    \textlatin{MultiHead-Attention} & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\phantomsection
+\subsection*{Ερώτημα 5 -- \textlatin{Transformer-Encoder}}
+\addcontentsline{toc}{subsection}{Ερώτημα 5 -- Transformer-Encoder}
+
+% Συμπληρώστε τα κενά στο attention.TransformerEncoderModel
+% Average-pooling για εξαγωγή αναπαράστασης πρότασης
+
+\paragraph{Διαφορά από \textlatin{MultiHeadAttentionModel}:}
+
+% TODO: ...
+
+\paragraph{\textlatin{Default} τιμές παραμέτρων στην κλασική αρχιτεκτονική \textlatin{Transformer}:}
+
+% TODO: ...
+
+\begin{table}[H]
+  \centering
+  \caption{Αποτελέσματα Ερωτήματος 5 (\textlatin{Transformer-Encoder})}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
+    \midrule
+    \textlatin{Transformer-Encoder} & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\phantomsection
+\subsection*{Ερώτημα 6 -- \textlatin{Pre-Trained Transformers (Zero-Shot)}}
+\addcontentsline{toc}{subsection}{Ερώτημα 6 -- Pre-Trained Transformers}
+
+% Εκτελέστε το transfer_pretrained.py για τουλάχιστον 3 μοντέλα (από HuggingFace)
+% για κάθε dataset. Συγκρίνετε τις επιδόσεις.
+
+\begin{table}[H]
+  \centering
+  \caption{Αποτελέσματα \textlatin{Pre-Trained Transformers} -- \textlatin{Sentence Polarity}}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
+    \midrule
+    % TODO: \textlatin{Μοντέλο 1 (π.χ. bert-base-uncased)} & -- & -- & -- \\
+    % TODO: \textlatin{Μοντέλο 2}                          & -- & -- & -- \\
+    % TODO: \textlatin{Μοντέλο 3}                          & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Αποτελέσματα \textlatin{Pre-Trained Transformers} -- \textlatin{Semeval 2017}}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
+    \midrule
+    % TODO: \textlatin{Μοντέλο 1} & -- & -- & -- \\
+    % TODO: \textlatin{Μοντέλο 2} & -- & -- & -- \\
+    % TODO: \textlatin{Μοντέλο 3} & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{Σχολιασμός αποτελεσμάτων:}
+
+% TODO: Συγκρίνετε τα μοντέλα μεταξύ τους και με τα προηγούμενα αποτελέσματα.
+
+\phantomsection
+\subsection*{Ερώτημα 7 -- \textlatin{Fine-Tuning Pre-Trained Transformers}}
+\addcontentsline{toc}{subsection}{Ερώτημα 7 -- Fine-Tuning Pre-Trained Transformers}
+
+% Χρησιμοποιήστε finetune_pretrained.py (Google Colab)
+% Τουλάχιστον 3 μοντέλα για κάθε dataset
+
+\begin{table}[H]
+  \centering
+  \caption{Αποτελέσματα \textlatin{Fine-Tuned Transformers} -- \textlatin{Sentence Polarity}}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
+    \midrule
+    % TODO: \textlatin{Μοντέλο 1} & -- & -- & -- \\
+    % TODO: \textlatin{Μοντέλο 2} & -- & -- & -- \\
+    % TODO: \textlatin{Μοντέλο 3} & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Αποτελέσματα \textlatin{Fine-Tuned Transformers} -- \textlatin{Semeval 2017}}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
+    \midrule
+    % TODO: \textlatin{Μοντέλο 1} & -- & -- & -- \\
+    % TODO: \textlatin{Μοντέλο 2} & -- & -- & -- \\
+    % TODO: \textlatin{Μοντέλο 3} & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{Σχολιασμός αποτελεσμάτων:}
+
+% TODO: Συγκρίνετε zero-shot vs fine-tuned. Ποια μοντέλα απέδωσαν καλύτερα και γιατί;
+
+\phantomsection
+\subsection*{Ερώτημα 8 -- Διάλογος με \textlatin{ChatGPT} για \textlatin{GPT} Κώδικα}
+\addcontentsline{toc}{subsection}{Ερώτημα 8 -- Διάλογος με ChatGPT}
+
+% Χρησιμοποιήστε τον κώδικα "Let's build GPT: from scratch, in code, spelled out"
+% Ζητήστε από το ChatGPT: εξήγηση, αξιολόγηση, refactoring
+
+\paragraph{Παραδείγματα διαλόγου:}
+
+% TODO: Επικολλήστε αντιπροσωπευτικά αποσπάσματα του διαλόγου με το ChatGPT
+
+\paragraph{Σχολιασμός απόδοσης:}
+
+% TODO: Εξηγήθηκε σωστά ο κώδικας; Ήταν η αξιολόγηση σωστή; Πώς ήταν το refactoring;
+
+% ============================================================
+%  ΣΥΓΚΕΝΤΡΩΤΙΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ
+% ============================================================
+\newpage
+\phantomsection
+\section*{Συγκεντρωτικά Αποτελέσματα}
+\addcontentsline{toc}{section}{Συγκεντρωτικά Αποτελέσματα}
+
+\begin{table}[H]
+  \centering
+  \caption{Σύγκριση όλων των μοντέλων -- \textbf{\textlatin{[Επιλεγμένο Dataset]}}}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
+    \midrule
+    \textlatin{Baseline DNN (mean pooling)}  & -- & -- & -- \\
+    \textlatin{Mean + Max Pooling}           & -- & -- & -- \\
+    \textlatin{LSTM}                         & -- & -- & -- \\
+    \textlatin{BiLSTM}                       & -- & -- & -- \\
+    \textlatin{Self-Attention}               & -- & -- & -- \\
+    \textlatin{Multi-Head Attention}         & -- & -- & -- \\
+    \textlatin{Transformer-Encoder}          & -- & -- & -- \\
+    \textlatin{Pre-Trained (best)}           & -- & -- & -- \\
+    \textlatin{Fine-Tuned (best)}            & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\end{document}
