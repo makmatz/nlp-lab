@@ -12,7 +12,7 @@ from config import EMB_PATH
 from dataloading import SentenceDataset
 from early_stopper import EarlyStopper
 from models import BaselineDNN, LSTM
-from attention import SimpleSelfAttentionModel
+from attention import SimpleSelfAttentionModel, MultiHeadAttentionModel
 from training import train_dataset, eval_dataset, get_metrics_report, torch_train_val_split
 from utils.load_datasets import load_MR, load_Semeval2017A
 from utils.load_embeddings import load_word_vectors
@@ -84,9 +84,14 @@ test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False)
 #                     trainable_emb=EMB_TRAINABLE,
 #                     bidirectional=True)
 
-model = SimpleSelfAttentionModel(output_size=1 if n_classes == 2 else n_classes,
+# model = SimpleSelfAttentionModel(output_size=1 if n_classes == 2 else n_classes,
+#                                 embeddings=embeddings,
+#                                 max_length=60)
+
+model = MultiHeadAttentionModel(output_size=1 if n_classes == 2 else n_classes,
                                 embeddings=embeddings,
-                                max_length=60)
+                                max_length=60,
+                                n_head=5)
 
 model.to(DEVICE)
 print(model)

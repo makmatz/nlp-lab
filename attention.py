@@ -90,7 +90,7 @@ class MultiHeadAttention(nn.Module):
         super().__init__()
         self.heads = nn.ModuleList([Head(head_size, n_embd)
                                     for _ in range(num_heads)])
-        self.proj = nn.Linear(n_embd, n_embd)
+        self.proj = nn.Linear(num_heads * head_size, n_embd)
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x):
@@ -101,18 +101,38 @@ class MultiHeadAttention(nn.Module):
 
 class MultiHeadAttentionModel(nn.Module):
 
-    def __init__(self, output_size, embeddings, max_length=60, n_head=3):
+    def __init__(self, output_size, embeddings, max_length=60, n_head=4):
         super().__init__()
 
-        # TODO: Main-Lab-Q4 - define the model
-        # Hint: it will be similar to `SimpleSelfAttentionModel` but
-        # `MultiHeadAttention` will be utilized for the self-attention module here
-        ...
+        self.n_head = n_head
+        self.max_length = max_length
 
-    def forward(self, x):
-        ...
+        embeddings = np.array(embeddings)
+        num_embeddings, dim = embeddings.shape
 
-        logits = ...
+        self.token_embedding_table = nn.Embedding(num_embeddings, dim)
+        self.token_embedding_table = self.token_embedding_table.from_pretrained(
+            torch.Tensor(embeddings), freeze=True)
+        self.position_embedding_table = nn.Embedding(self.max_length, dim)
+
+        head_size = dim // self.n_head
+        self.sa = MultiHeadAttention(self.n_head, head_size, dim)
+        self.ffwd = FeedFoward(dim)
+        self.ln1 = nn.LayerNorm(dim)
+        self.ln2 = nn.LayerNorm(dim)
+
+        self.output = nn.Linear(dim, output_size)
+
+    def forward(self, x, lengths=None):
+        B, T = x.shape
+        tok_emb = self.token_embedding_table(x) # (B, T, C)
+        pos_emb = self.position_embedding_table(torch.arange(T))  # (T,C)
+        x = tok_emb + pos_emb # (B, T, C)
+        x = x + self.sa(self.ln1(x))
+        x = x + self.ffwd(self.ln2(x))
+        x = x.mean(dim=1)  # (B,C)
+
+        logits = self.output(x)  # (C,output)
         return logits
 
 
