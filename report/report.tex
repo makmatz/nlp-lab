@@ -60,8 +60,7 @@
 \section*{Μέρος Α΄: Προπαρασκευή}
 \addcontentsline{toc}{section}{Μέρος Α΄: Προπαρασκευή}
 
-Για τα ζητούμενα της προπαρασκευής χρησιμοποιήσαμε το \textbf{\textlatin{[Sentence Polarity Dataset / Semeval 2017 Task4-A]}}
-% TODO: επιλέξτε ένα dataset και διαγράψτε το άλλο
+Για τα ζητούμενα της προπαρασκευής χρησιμοποιήσαμε το \textbf{\textlatin{Sentence Polarity Dataset (MR)}}.
 
 \phantomsection
 \subsection*{Ζητούμενο 1 -- Κωδικοποίηση Επισημειώσεων}
@@ -197,16 +196,15 @@
     \toprule
     \textbf{\textlatin{Dataset}} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
     \midrule
-    \textlatin{Sentence Polarity} & -- & -- & -- \\
-    \textlatin{Semeval 2017}      & -- & -- & -- \\
+    \textlatin{Sentence Polarity (MR)} & 0.7281 & 0.7279 & 0.7281 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \begin{figure}[H]
   \centering
-  % \includegraphics[width=0.8\textwidth]{figures/loss_curve_baseline.png}
-  \caption{Καμπύλες εκπαίδευσης (\textlatin{training \& test loss}) ανά εποχή -- \textlatin{Baseline}}
+  \includegraphics[width=0.8\textwidth]{../curves/loss_curve_baseline_mean_MR.png}
+  \caption{Καμπύλες εκπαίδευσης (\textlatin{training \& test loss}) ανά εποχή -- \textlatin{Baseline (mean pooling), MR}}
   \label{fig:loss_baseline}
 \end{figure}
 
@@ -247,8 +245,7 @@
 \section*{Μέρος Β΄: Κύρια Άσκηση}
 \addcontentsline{toc}{section}{Μέρος Β΄: Κύρια Άσκηση}
 
-Για τα ερωτήματα 1--5 χρησιμοποιήσαμε το \textbf{\textlatin{[Sentence Polarity Dataset / Semeval 2017 Task4-A]}}.
-% TODO: επιλέξτε ένα dataset
+Για τα ερωτήματα 1--8 χρησιμοποιήσαμε το \textbf{\textlatin{Sentence Polarity Dataset (MR)}} για τα ερωτήματα 1--5 και και το \textbf{\textlatin{Semeval 2017 Task4-A}} για τα ερωτήματα 6--7.
 
 \phantomsection
 \subsection*{Ερώτημα 1 -- \textlatin{Mean + Max Pooling}}
@@ -269,10 +266,17 @@
     \toprule
     \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
     \midrule
-    \textlatin{Mean+Max Pooling} & -- & -- & -- \\
+    \textlatin{Mean+Max Pooling} & 0.7462 & 0.7454 & 0.7462 \\
     \bottomrule
   \end{tabular}
 \end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{../curves/loss_curve_baseline_mean_max_MR.png}
+  \caption{Καμπύλες εκπαίδευσης (\textlatin{training \& test loss}) ανά εποχή -- \textlatin{Mean+Max Pooling, MR}}
+  \label{fig:loss_mean_max}
+\end{figure}
 
 \phantomsection
 \subsection*{Ερώτημα 2 -- \textlatin{LSTM}}
@@ -297,16 +301,15 @@
     \toprule
     \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
     \midrule
-    \textlatin{LSTM (unidirectional)}  & -- & -- & -- \\
-    \textlatin{BiLSTM}                 & -- & -- & -- \\
+    \textlatin{LSTM (unidirectional)}  & 0.7568 & 0.7546 & 0.7568 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \begin{figure}[H]
   \centering
-  % \includegraphics[width=0.8\textwidth]{figures/loss_curve_lstm.png}
-  \caption{Καμπύλες εκπαίδευσης \textlatin{LSTM}}
+  \includegraphics[width=0.8\textwidth]{../curves/loss_curve_lstm_MR.png}
+  \caption{Καμπύλες εκπαίδευσης (\textlatin{training \& test loss}) ανά εποχή -- \textlatin{LSTM, MR}}
   \label{fig:loss_lstm}
 \end{figure}
 
@@ -326,10 +329,17 @@
     \toprule
     \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
     \midrule
-    \textlatin{Self-Attention} & -- & -- & -- \\
+    \textlatin{Self-Attention} & 0.7492 & 0.7489 & 0.7492 \\
     \bottomrule
   \end{tabular}
 \end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{../curves/loss_curve_attention_MR.png}
+  \caption{Καμπύλες εκπαίδευσης (\textlatin{training \& test loss}) ανά εποχή -- \textlatin{Self-Attention, MR}}
+  \label{fig:loss_attention}
+\end{figure}
 
 \paragraph{3.2 \textlatin{Queries, Keys, Values} και \textlatin{Position Embeddings}:}
 
@@ -350,10 +360,18 @@
     \toprule
     \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
     \midrule
-    \textlatin{MultiHead-Attention} & -- & -- & -- \\
+    \textlatin{MultiHead-Attention (n\_head=4)} & 0.7477 & 0.7475 & 0.7477 \\
+    \textlatin{MultiHead-Attention (n\_head=8)} & 0.7402 & 0.7401 & 0.7402 \\
     \bottomrule
   \end{tabular}
 \end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{../curves/loss_curve_multihead_MR.png}
+  \caption{Καμπύλες εκπαίδευσης (\textlatin{training \& test loss}) ανά εποχή -- \textlatin{Multi-Head Attention, MR}}
+  \label{fig:loss_multihead}
+\end{figure}
 
 \phantomsection
 \subsection*{Ερώτημα 5 -- \textlatin{Transformer-Encoder}}
@@ -377,10 +395,19 @@
     \toprule
     \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
     \midrule
-    \textlatin{Transformer-Encoder} & -- & -- & -- \\
+    \textlatin{Transformer-Encoder (n\_head=4, n\_layer=3)} & 0.7492 & 0.7462 & 0.7492 \\
+    \textlatin{Transformer-Encoder (n\_head=8, n\_layer=6)} & 0.7477 & 0.7456 & 0.7477 \\
+    \textlatin{Transformer-Encoder (n\_head=4, n\_layer=6)} & 0.7704 & 0.7699 & 0.7704 \\
     \bottomrule
   \end{tabular}
 \end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{../curves/loss_curve_transformer_MR.png}
+  \caption{Καμπύλες εκπαίδευσης (\textlatin{training \& test loss}) ανά εποχή -- \textlatin{Transformer-Encoder, MR}}
+  \label{fig:loss_transformer}
+\end{figure}
 
 \phantomsection
 \subsection*{Ερώτημα 6 -- \textlatin{Pre-Trained Transformers (Zero-Shot)}}
@@ -391,14 +418,16 @@
 
 \begin{table}[H]
   \centering
-  \caption{Αποτελέσματα \textlatin{Pre-Trained Transformers} -- \textlatin{Sentence Polarity}}
+  \caption{Αποτελέσματα \textlatin{Pre-Trained Transformers} -- \textlatin{Sentence Polarity (MR)}}
   \begin{tabular}{lccc}
     \toprule
     \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
     \midrule
-    % TODO: \textlatin{Μοντέλο 1 (π.χ. bert-base-uncased)} & -- & -- & -- \\
-    % TODO: \textlatin{Μοντέλο 2}                          & -- & -- & -- \\
-    % TODO: \textlatin{Μοντέλο 3}                          & -- & -- & -- \\
+    \textlatin{siebert/sentiment-roberta-large-english}           & 0.9260 & 0.9260 & 0.9260 \\
+    \textlatin{textattack/bert-base-uncased-SST-2}                & 0.8988 & 0.8987 & 0.8988 \\
+    \textlatin{distilbert-base-uncased-finetuned-sst-2-english}   & 0.8912 & 0.8912 & 0.8912 \\
+    \textlatin{aychang/roberta-base-imdb}                         & 0.8489 & 0.8485 & 0.8489 \\
+    \textlatin{lvwerra/distilbert-imdb}                           & 0.8202 & 0.8195 & 0.8202 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -410,9 +439,11 @@
     \toprule
     \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
     \midrule
-    % TODO: \textlatin{Μοντέλο 1} & -- & -- & -- \\
-    % TODO: \textlatin{Μοντέλο 2} & -- & -- & -- \\
-    % TODO: \textlatin{Μοντέλο 3} & -- & -- & -- \\
+    \textlatin{cardiffnlp/twitter-roberta-base-sentiment}         & 0.7238 & 0.7222 & 0.7229 \\
+    \textlatin{cardiffnlp/twitter-roberta-base-sentiment-latest}  & 0.7205 & 0.7226 & 0.7330 \\
+    \textlatin{finiteautomata/bertweet-base-sentiment-analysis}   & 0.7178 & 0.7181 & 0.7302 \\
+    \textlatin{cardiffnlp/twitter-xlm-roberta-base-sentiment}     & 0.6926 & 0.6886 & 0.6929 \\
+    \textlatin{Seethal/sentiment\_analysis\_generic\_dataset}     & 0.6184 & 0.6093 & 0.6181 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -485,20 +516,20 @@
 
 \begin{table}[H]
   \centering
-  \caption{Σύγκριση όλων των μοντέλων -- \textbf{\textlatin{[Επιλεγμένο Dataset]}}}
+  \caption{Σύγκριση όλων των μοντέλων -- \textbf{\textlatin{Sentence Polarity (MR)}} (εκτός \textlatin{Pre-Trained Semeval})}
   \begin{tabular}{lccc}
     \toprule
     \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
     \midrule
-    \textlatin{Baseline DNN (mean pooling)}  & -- & -- & -- \\
-    \textlatin{Mean + Max Pooling}           & -- & -- & -- \\
-    \textlatin{LSTM}                         & -- & -- & -- \\
-    \textlatin{BiLSTM}                       & -- & -- & -- \\
-    \textlatin{Self-Attention}               & -- & -- & -- \\
-    \textlatin{Multi-Head Attention}         & -- & -- & -- \\
-    \textlatin{Transformer-Encoder}          & -- & -- & -- \\
-    \textlatin{Pre-Trained (best)}           & -- & -- & -- \\
-    \textlatin{Fine-Tuned (best)}            & -- & -- & -- \\
+    \textlatin{Baseline DNN (mean pooling)}              & 0.7281 & 0.7279 & 0.7281 \\
+    \textlatin{Mean + Max Pooling}                       & 0.7462 & 0.7454 & 0.7462 \\
+    \textlatin{LSTM}                                     & 0.7568 & 0.7546 & 0.7568 \\
+    \textlatin{Self-Attention}                           & 0.7492 & 0.7489 & 0.7492 \\
+    \textlatin{Multi-Head Attention (n\_head=4)}         & 0.7477 & 0.7475 & 0.7477 \\
+    \textlatin{Transformer-Encoder (n\_head=4, n\_layer=6)} & 0.7704 & 0.7699 & 0.7704 \\
+    \textlatin{Pre-Trained best (siebert, MR)}           & 0.9260 & 0.9260 & 0.9260 \\
+    \textlatin{Pre-Trained best (cardiffnlp, Semeval)}   & 0.7238 & 0.7222 & 0.7229 \\
+    \textlatin{Fine-Tuned (best)}                        & -- & -- & -- \\
     \bottomrule
   \end{tabular}
 \end{table}
