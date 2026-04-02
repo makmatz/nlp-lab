@@ -97,7 +97,8 @@ test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False)
 
 model = BaselineDNN(output_size=1 if n_classes == 2 else n_classes,
                     embeddings=embeddings,
-                    trainable_emb=EMB_TRAINABLE)
+                    trainable_emb=EMB_TRAINABLE,
+                    pooling='mean')
 model.to(DEVICE)
 print(model)
 

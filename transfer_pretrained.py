@@ -76,7 +76,7 @@ DATASET_MODELS = {
 
 
 if __name__ == '__main__':
-    results_file = open('pretrained_results.txt', 'w')
+    results_file = open('report/pretrained_results.txt', 'w')
 
     for DATASET, models in DATASET_MODELS.items():
         if DATASET == "Semeval2017A":

@@ -1,3 +1,4 @@
+import argparse
 import os
 import warnings
 
@@ -23,19 +24,37 @@ warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 # Configuration
 ########################################################
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--model', type=str, default='transformer',
+                    choices=['baseline_mean', 'baseline_mean_max', 'lstm', 'attention', 'multihead', 'transformer'],
+                    help='Model to train')
+parser.add_argument('--dataset', type=str, default='MR',
+                    choices=['MR', 'Semeval2017A'],
+                    help='Dataset to use')
+parser.add_argument('--n_head', type=int, default=4,
+                    help='Number of attention heads (transformer/multihead only)')
+parser.add_argument('--n_layer', type=int, default=3,
+                    help='Number of transformer encoder layers (transformer only)')
+parser.add_argument('--no_show', action='store_true',
+                    help='Save plots without displaying them')
+args = parser.parse_args()
+DATASET = args.dataset
+
 # Download the embeddings of your choice
 # for example http://nlp.stanford.edu/data/glove.6B.zip
 
 # 1 - point to the pretrained embeddings file (must be in /embeddings folder)
-EMBEDDINGS = os.path.join(EMB_PATH, "glove.6B.300d.txt")
+if DATASET == "MR":
+    EMBEDDINGS = os.path.join(EMB_PATH, "glove.6B.200d.txt")
+elif DATASET == "Semeval2017A":
+    EMBEDDINGS = os.path.join(EMB_PATH, "glove.twitter.27B.200d.txt")
 
 # 2 - set the correct dimensionality of the embeddings
-EMB_DIM = 300
+EMB_DIM = 200
 
 EMB_TRAINABLE = False
 BATCH_SIZE = 128
 EPOCHS = 50
-DATASET = "MR"  # options: "MR", "Semeval2017A"
 
 # if your computer has a CUDA compatible gpu use it, otherwise use the cpu
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -79,25 +98,19 @@ test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False)
 # Model Definition, Training, and Evaluation
 #############################################################################
 
-# model = LSTM(output_size=1 if n_classes == 2 else n_classes,
-#                     embeddings=embeddings,
-#                     trainable_emb=EMB_TRAINABLE,
-#                     bidirectional=True)
+output_size = 1 if n_classes == 2 else n_classes
 
-# model = SimpleSelfAttentionModel(output_size=1 if n_classes == 2 else n_classes,
-#                                 embeddings=embeddings,
-#                                 max_length=60)
+models = {
+    'baseline_mean':    BaselineDNN(output_size=output_size, embeddings=embeddings, trainable_emb=EMB_TRAINABLE, pooling='mean'),
+    'baseline_mean_max':BaselineDNN(output_size=output_size, embeddings=embeddings, trainable_emb=EMB_TRAINABLE, pooling='mean_max'),
+    'lstm':       LSTM(output_size=output_size, embeddings=embeddings, trainable_emb=EMB_TRAINABLE, bidirectional=True),
+    'attention':  SimpleSelfAttentionModel(output_size=output_size, embeddings=embeddings, max_length=60),
+    'multihead':  MultiHeadAttentionModel(output_size=output_size, embeddings=embeddings, max_length=60, n_head=args.n_head),
+    'transformer':TransformerEncoderModel(output_size=output_size, embeddings=embeddings, max_length=60, n_head=args.n_head, n_layer=args.n_layer),
+}
 
-# model = MultiHeadAttentionModel(output_size=1 if n_classes == 2 else n_classes,
-#                                 embeddings=embeddings,
-#                                 max_length=60,
-#                                 n_head=5)
-
-model = TransformerEncoderModel(output_size=1 if n_classes == 2 else n_classes,
-                                embeddings=embeddings,
-                                max_length=60,
-                                n_head=4,
-                                n_layer=3)
+model = models[args.model]
+print(f'Using model: {args.model}')
 
 model.to(DEVICE)
 print(model)
@@ -139,6 +152,24 @@ print(f"Final Metrics on {DATASET}:")
 print(f"\nTrain set:\n{get_metrics_report(y_train_gold, y_train_pred)}")
 print(f"\nTest set:\n{get_metrics_report(y_test_gold, y_test_pred)}")
 
+model_info = args.model
+if args.model in ('transformer', 'multihead'):
+    model_info += f' (n_head={args.n_head}'
+    if args.model == 'transformer':
+        model_info += f', n_layer={args.n_layer}'
+    model_info += ')'
+
+entry = (
+    f'{"=" * 60}\n'
+    f'Dataset:  {DATASET}\n'
+    f'Model:    {model_info}\n'
+    f'{"=" * 60}\n'
+    f'Train set:\n{get_metrics_report(y_train_gold, y_train_pred)}\n'
+    f'Test set:\n{get_metrics_report(y_test_gold, y_test_pred)}\n'
+)
+with open('report/results.txt', 'a') as f:
+    f.write(entry)
+
 # Plot loss curves
 plt.figure(figsize=(8, 5))
 plt.plot(range(1, len(train_losses) + 1), train_losses, label='Train Loss')
@@ -149,5 +180,6 @@ plt.title(f'Training, Validation and Test Loss')
 plt.legend()
 plt.tight_layout()
 os.makedirs('curves', exist_ok=True)
-plt.savefig(f'curves/loss_curve.png')
-plt.show()
+plt.savefig(f'curves/loss_curve_{args.model}_{DATASET}.png')
+if not args.no_show:
+    plt.show(block=False)
