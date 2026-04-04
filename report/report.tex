@@ -456,7 +456,9 @@ q_i^{(c)} = x_i W_Q^{(c)},\qquad k_j^{(c)} = x_j W_K^{(c)},\qquad v_j^{(c)} = x_
 a_i = \left(\operatorname{head}_i^{(1)} \oplus \operatorname{head}_i^{(2)} \oplus \cdots \oplus \operatorname{head}_i^{(A)}\right) W_O
 \]
 
-Στη δική μας υλοποίηση, μετά την εφαρμογή του \textlatin{multi-head attention}, χρησιμοποιείται \textlatin{average-pooling} για την εξαγωγή της τελικής αναπαράστασης της πρότασης πριν από το τελευταίο γραμμικό \textlatin{layer} ταξινόμησης. Η επίδοση του μοντέλου στο \textlatin{test set} παρουσιάζεται στον αντίστοιχο πίνακα αποτελεσμάτων.
+Στη δική μας υλοποίηση, μετά την εφαρμογή του \textlatin{multi-head attention}, χρησιμοποιείται \textlatin{average-pooling} για την εξαγωγή της 
+τελικής αναπαράστασης της πρότασης πριν από το τελευταίο γραμμικό \textlatin{layer} ταξινόμησης. Η επίδοση του μοντέλου στο \textlatin{test set} 
+παρουσιάζεται στον αντίστοιχο πίνακα αποτελεσμάτων.
 
 \begin{table}[H]
   \centering
@@ -487,11 +489,44 @@ a_i = \left(\operatorname{head}_i^{(1)} \oplus \operatorname{head}_i^{(2)} \oplu
 
 \paragraph{Διαφορά από \textlatin{MultiHeadAttentionModel}:}
 
-% TODO: ...
+Στο ερώτημα αυτό χρησιμοποιούμε έναν \textlatin{Transformer-Encoder} για κατηγοριοποίηση συναισθήματος, διατηρώντας το \textlatin{average-pooling} 
+για την εξαγωγή της τελικής αναπαράστασης της πρότασης. Όπως και στα προηγούμενα μοντέλα, κάθε πρόταση μετατρέπεται αρχικά σε ακολουθία από 
+\textlatin{token embeddings}, στα οποία προστίθενται \textlatin{position embeddings}, ώστε το μοντέλο να γνωρίζει τη θέση κάθε \textlatin{token} 
+μέσα στην πρόταση. Στη συνέχεια, η ακολουθία περνά από διαδοχικά \textlatin{Transformer blocks}, όπου κάθε \textlatin{block} αποτελείται από 
+\textlatin{multi-head self-attention}, \textlatin{feed-forward network}, \textlatin{residual connections} και \textlatin{layer normalization}. 
+Αν συμβολίσουμε την είσοδο ενός \textlatin{block} με \(x\), τότε η βασική του μορφή είναι:
+\[
+x' = x + \operatorname{MultiHeadAttention}(\operatorname{LayerNorm}(x))
+\]
+\[
+y = x' + \operatorname{FeedForward}(\operatorname{LayerNorm}(x'))
+\]
+Μετά τη διέλευση από όλα τα \textlatin{blocks}, εφαρμόζεται \textlatin{average-pooling} στις τελικές αναπαραστάσεις των \textlatin{tokens}, ώστε 
+να προκύψει μία ενιαία αναπαράσταση πρότασης, η οποία οδηγείται στο τελικό γραμμικό \textlatin{layer} ταξινόμησης.
+
+Η βασική διαφορά του \textlatin{TransformerEncoderModel} σε σχέση με το \textlatin{MultiHeadAttentionModel} είναι ότι το δεύτερο χρησιμοποιεί 
+ουσιαστικά ένα μόνο επίπεδο \textlatin{multi-head attention} και ένα \textlatin{feed-forward layer}, ενώ ο \textlatin{Transformer-Encoder} στοιβάζει 
+πολλά τέτοια \textlatin{blocks} διαδοχικά. Άρα ο \textlatin{Transformer-Encoder} έχει μεγαλύτερο βάθος και μπορεί να μάθει πιο σύνθετες και πιο 
+αφηρημένες σχέσεις μεταξύ των λέξεων της πρότασης. Επιπλέον, στο τέλος εφαρμόζεται και τελικό \textlatin{layer normalization}, το οποίο σταθεροποιεί 
+περισσότερο την αναπαράσταση πριν από την ταξινόμηση.
 
 \paragraph{\textlatin{Default} τιμές παραμέτρων στην κλασική αρχιτεκτονική \textlatin{Transformer}:}
 
-% TODO: ...
+Στα πειράματά μας μεταβάλαμε κυρίως τον αριθμό των κεφαλών \textlatin{attention} (\textlatin{n\_head}) και τον αριθμό των \textlatin{encoder layers} 
+(\textlatin{n\_layer}). Στην κλασική αρχιτεκτονική του \textlatin{Transformer} των Vaswani \textlatin{et al.}, οι βασικές \textlatin{default} τιμές 
+για τον \textlatin{encoder} είναι:
+\begin{itemize}
+  \item \textlatin{n\_head} \(= 8\)
+  \item \textlatin{n\_layer} \(= 6\)
+  \item \textlatin{model dimension} \(d = 512\)
+  \item \textlatin{feed-forward dimension} \(= 2048\)
+  \item \(d_k = d_v = 64\)
+\end{itemize}
+
+Στη δική μας υλοποίηση, επειδή χρησιμοποιούμε προεκπαιδευμένα \textlatin{embeddings} διαστάσεων 200, το \textlatin{model dimension} καθορίζεται 
+από αυτά και δεν είναι 512. Η επίδοση του μοντέλου στο \textlatin{test set} για το \textlatin{dataset MR} παρουσιάζεται στον παρακάτω πίνακα 
+αποτελεσμάτων. Παρατηρούμε ότι η καλύτερη επίδοση επιτεύχθηκε με \textlatin{n\_head = 4} και \textlatin{n\_layer = 6}, γεγονός που δείχνει ότι 
+το μεγαλύτερο βάθος βοήθησε το μοντέλο να μάθει πιο εκφραστικές αναπαραστάσεις για την ταξινόμηση συναισθήματος.
 
 \begin{table}[H]
   \centering
