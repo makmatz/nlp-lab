@@ -4,6 +4,9 @@ embeddings/
 __pycache__/
 best_model.pt
 
+# LaTeX output
+report/*.pdf
+
 # LaTeX build artifacts
 report/*.aux
 report/*.fdb_latexmk
