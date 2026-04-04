@@ -66,11 +66,37 @@
 \subsection*{Ζητούμενο 1 -- Κωδικοποίηση Επισημειώσεων}
 \addcontentsline{toc}{subsection}{Ζητούμενο 1 -- Κωδικοποίηση Επισημειώσεων}
 
-% Εκτυπώστε τα πρώτα 10 labels από τα δεδομένα εκπαίδευσης και τις αντιστοιχίες τους σε αριθμούς.
+Για την κωδικοποίηση των επισημειώσεων χρησιμοποιήσαμε την κλάση \textlatin{LabelEncoder} από τη βιβλιοθήκη \textlatin{scikit-learn}. 
+Αρχικά, τα \textlatin{labels} των παραδειγμάτων εκπαίδευσης βρίσκονταν σε μορφή κειμένου, όπως \textlatin{positive}, \textlatin{negative} 
+και \textlatin{neutral}. Ο \textlatin{LabelEncoder} εκπαιδεύτηκε πάνω στα \textlatin{labels} του \textlatin{training set} και στη συνέχεια 
+χρησιμοποιήθηκε για να μετατρέψει τόσο τα \textlatin{labels} του \textlatin{training set} όσο και του \textlatin{test set} σε ακέραιες τιμές, 
+έτσι ώστε η αντιστοίχιση να είναι κοινή και συνεπής και στα δύο σύνολα.
 
-\begin{lstlisting}[caption={\textlatin{Έξοδος Ζητούμενου 1 (main.py:EX1)}}]
-% TODO: Επικολλήστε εδώ την έξοδο της εκτύπωσης των 10 πρώτων labels
-\end{lstlisting}
+Στην υλοποίηση, αρχικά αποθηκεύσαμε τα πρώτα 10 αρχικά \textlatin{labels} του \textlatin{training set}, έπειτα εφαρμόσαμε 
+το \textlatin{fit} του \textlatin{LabelEncoder} στα \textlatin{labels} του \textlatin{training set} και στη συνέχεια χρησιμοποιήσαμε τη 
+μέθοδο \textlatin{transform} για την αριθμητική κωδικοποίησή τους. Με αυτόν τον τρόπο, κάθε κλάση αντιστοιχίζεται σε έναν μοναδικό ακέραιο αριθμό, 
+μορφή απαραίτητη για την εκπαίδευση του νευρωνικού δικτύου.
+
+\begin{table}[H]
+  \centering
+  \caption{\textlatin{Έξοδος Ζητούμενου 1 (main.py:EX1)}}
+  \begin{tabular}{lc}
+    \toprule
+    \textbf{\textlatin{Label}} & \textbf{\textlatin{Encoded value}} \\
+    \midrule
+    \textlatin{positive} & 1 \\
+    \textlatin{positive} & 1 \\
+    \textlatin{positive} & 1 \\
+    \textlatin{positive} & 1 \\
+    \textlatin{positive} & 1 \\
+    \textlatin{positive} & 1 \\
+    \textlatin{positive} & 1 \\
+    \textlatin{positive} & 1 \\
+    \textlatin{positive} & 1 \\
+    \textlatin{positive} & 1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \phantomsection
 \subsection*{Ζητούμενο 2 -- Λεκτική Ανάλυση (\textlatin{Tokenization})}
