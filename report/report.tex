@@ -408,15 +408,15 @@ q_i = x_i W_Q,\qquad k_i = x_i W_K,\qquad v_i = x_i W_V
 Η ομοιότητα μεταξύ του \textlatin{token} $i$ και ενός άλλου \textlatin{token} $j$ υπολογίζεται από το εσωτερικό γινόμενο του \textlatin{query} με 
 το \textlatin{key}, κλιμακωμένο με $\sqrt{d_k}$:
 \[
-\text{score}(x_i, x_j) = \frac{q_i \cdot k_j}{\sqrt{d_k}}
+\operatorname{score}(x_i, x_j) = \frac{q_i \cdot k_j}{\sqrt{d_k}}
 \]
 Στη συνέχεια, τα \textlatin{scores} κανονικοποιούνται με \textlatin{softmax}, ώστε να προκύψουν τα βάρη προσοχής:
 \[
-\alpha_{ij} = \operatorname{softmax}(\text{score}(x_i, x_j))
+\alpha_{ij} = \operatorname{softmax}(\operatorname{score}(x_i, x_j))
 \]
 και το τελικό \textlatin{output} της κεφαλής προκύπτει ως σταθμισμένο άθροισμα των \textlatin{value vectors}:
 \[
-\text{head}_i = \sum_{j \leq i} \alpha_{ij} v_j
+\operatorname{head}_i = \sum_{j \leq i} \alpha_{ij} v_j
 \]
 Άρα, το \textlatin{attention output} ενός \textlatin{token} είναι μια νέα αναπαράσταση που συγκεντρώνει πληροφορία από τα άλλα \textlatin{tokens}, 
 δίνοντας μεγαλύτερο βάρος σε όσα θεωρούνται πιο σχετικά.
