@@ -79,7 +79,7 @@
 
 \begin{table}[H]
   \centering
-  \caption{\textlatin{Έξοδος Ζητούμενου 1 (main.py:EX1)}}
+  \caption{Έξοδος Ζητούμενου 1\textlatin{(main.py:EX1)}}
   \begin{tabular}{lc}
     \toprule
     \textbf{\textlatin{Label}} & \textbf{\textlatin{Encoded value}} \\
@@ -102,11 +102,34 @@
 \subsection*{Ζητούμενο 2 -- Λεκτική Ανάλυση (\textlatin{Tokenization})}
 \addcontentsline{toc}{subsection}{Ζητούμενο 2 -- Λεκτική Ανάλυση (Tokenization)}
 
-% Εκτυπώστε τα πρώτα 10 παραδείγματα από τα δεδομένα εκπαίδευσης (dataloading.py:EX2).
+Για τη λεκτική ανάλυση χρησιμοποιήσαμε την κλάση \textlatin{SentenceDataset} στο αρχείο \textlatin{dataloading.py}. 
+Στην αρχικοποίηση του \textlatin{Dataset}, κάθε πρόταση του \textlatin{MR} μετατρέπεται σε ακολουθία από \textlatin{tokens} με χρήση 
+της εντολής \textlatin{sentence.lower().split()}, δηλαδή το κείμενο μετατρέπεται πρώτα σε πεζά και στη συνέχεια χωρίζεται με βάση τα κενά. 
+Τα επεξεργασμένα παραδείγματα αποθηκεύονται στη μεταβλητή \textlatin{self.data} της κλάσης, ώστε να είναι διαθέσιμα στα επόμενα στάδια της 
+προεπεξεργασίας.
 
-\begin{lstlisting}[caption={Έξοδος Ζητούμενου 2 (dataloading.py:EX2)}]
-% TODO: Επικολλήστε εδώ την έξοδο των 10 πρώτων tokenized παραδειγμάτων
-\end{lstlisting}
+Τα πρώτα 10 \textlatin{tokenized} παραδείγματα του \textlatin{training set} φαίνονται στον παρακάτω πίνακα.
+
+\begin{table}[H]
+  \centering
+  \caption{Έξοδος Ζητούμενου 2 (\textlatin{dataloading.py:EX2})}
+  \begin{tabular}{cp{0.8\textwidth}}
+    \toprule
+    \textbf{\#} & \textbf{\textlatin{Tokenized example}} \\
+    \midrule
+    0 & \textlatin{the rock is destined to be the 21st century's new " conan " and that he's going to make a splash even greater than arnold schwarzenegger , jean-claud van damme or steven segal .} \\
+    1 & \textlatin{the gorgeously elaborate continuation of " the lord of the rings " trilogy is so huge that a column of words cannot adequately describe co-writer/director peter jackson's expanded vision of j . r . r . tolkien's middle-earth .} \\
+    2 & \textlatin{effective but too-tepid biopic} \\
+    3 & \textlatin{if you sometimes like to go to the movies to have fun , wasabi is a good place to start .} \\
+    4 & \textlatin{emerges as something rare , an issue movie that's so honest and keenly observed that it doesn't feel like one .} \\
+    5 & \textlatin{the film provides some great insight into the neurotic mindset of all comics -- even those who have reached the absolute top of the game .} \\
+    6 & \textlatin{offers that rare combination of entertainment and education .} \\
+    7 & \textlatin{perhaps no picture ever made has more literally showed that the road to hell is paved with good intentions .} \\
+    8 & \textlatin{steers turns in a snappy screenplay that curls at the edges ; it's so clever you want to hate it . but he somehow pulls it off .} \\
+    9 & \textlatin{take care of my cat offers a refreshingly different slice of asian cinema .} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \phantomsection
 \subsection*{Ζητούμενο 3 -- Κωδικοποίηση Παραδειγμάτων (Λέξεων)}
