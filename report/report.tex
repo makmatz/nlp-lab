@@ -513,7 +513,7 @@ y = x' + \operatorname{FeedForward}(\operatorname{LayerNorm}(x'))
 \paragraph{\textlatin{Default} τιμές παραμέτρων στην κλασική αρχιτεκτονική \textlatin{Transformer}:}
 
 Στα πειράματά μας μεταβάλαμε κυρίως τον αριθμό των κεφαλών \textlatin{attention} (\textlatin{n\_head}) και τον αριθμό των \textlatin{encoder layers} 
-(\textlatin{n\_layer}). Στην κλασική αρχιτεκτονική του \textlatin{Transformer} των Vaswani \textlatin{et al.}, οι βασικές \textlatin{default} τιμές 
+(\textlatin{n\_layer}). Στην κλασική αρχιτεκτονική του \textlatin{Transformer} οι βασικές \textlatin{default} τιμές 
 για τον \textlatin{encoder} είναι:
 \begin{itemize}
   \item \textlatin{n\_head} \(= 8\)
@@ -553,8 +553,26 @@ y = x' + \operatorname{FeedForward}(\operatorname{LayerNorm}(x'))
 \subsection*{Ερώτημα 6 -- \textlatin{Pre-Trained Transformers (Zero-Shot)}}
 \addcontentsline{toc}{subsection}{Ερώτημα 6 -- Pre-Trained Transformers}
 
-% Εκτελέστε το transfer_pretrained.py για τουλάχιστον 3 μοντέλα (από HuggingFace)
-% για κάθε dataset. Συγκρίνετε τις επιδόσεις.
+Στο ερώτημα αυτό χρησιμοποιήσαμε \textlatin{pre-trained Transformer} μοντέλα σε ρύθμιση \textlatin{zero-shot}, δηλαδή χωρίς επιπλέον εκπαίδευση 
+πάνω στα δεδομένα της άσκησης. Η υλοποίηση έγινε στο αρχείο \textlatin{transfer\_pretrained.py}, όπου για κάθε \textlatin{dataset} φορτώνεται ένα 
+σύνολο έτοιμων μοντέλων από το \textlatin{HuggingFace} μέσω του \textlatin{pipeline("sentiment-analysis")}. Για κάθε πρόταση του \textlatin{test set}, 
+το μοντέλο επιστρέφει μία ετικέτα συναισθήματος, η οποία μετατρέπεται στην κοινή μορφή των κλάσεων του αντίστοιχου \textlatin{dataset} μέσω κατάλληλου 
+\textlatin{label mapping}. Στη συνέχεια οι προβλέψεις συγκρίνονται με τις πραγματικές ετικέτες και υπολογίζονται οι μετρικές \textlatin{accuracy}, 
+\textlatin{recall (macro)} και \textlatin{F1-score (macro)}.
+
+Για το \textlatin{MR} αξιολογήθηκαν πέντε μοντέλα δυαδικής ταξινόμησης: \textlatin{siebert/sentiment-roberta-large-english}, 
+\textlatin{distilbert-base-uncased-finetuned-sst-2-english}, \textlatin{textattack/bert-base-uncased-SST-2}, \textlatin{lvwerra/distilbert-imdb} 
+και \textlatin{aychang/roberta-base-imdb}. Για το \textlatin{Semeval2017A} αξιολογήθηκαν πέντε μοντέλα τριταξικής ταξινόμησης: 
+\textlatin{cardiffnlp/twitter-roberta-base-sentiment}, \textlatin{finiteautomata/bertweet-base-sentiment-analysis}, 
+\textlatin{cardiffnlp/twitter-roberta-base-sentiment-latest}, \textlatin{cardiffnlp/twitter-xlm-roberta-base-sentiment} και 
+\textlatin{Seethal/sentiment\_analysis\_generic\_dataset}. Τα αποτελέσματα παρουσιάζονται στους παρακάτω πίνακες.
+
+Από τη σύγκριση των μοντέλων παρατηρούμε ότι στο \textlatin{MR} το καλύτερο μοντέλο ήταν το \textlatin{siebert/sentiment-roberta-large-english}, 
+με πολύ υψηλή επίδοση, ενώ στο \textlatin{Semeval2017A} καλύτερο αποδείχθηκε το \textlatin{cardiffnlp/twitter-roberta-base-sentiment}. 
+Το αποτέλεσμα αυτό είναι αναμενόμενο, καθώς τα μοντέλα που είχαν εκπαιδευτεί σε δεδομένα πιο κοντινά στο εκάστοτε \textlatin{domain} απέδωσαν 
+καλύτερα: μοντέλα εκπαιδευμένα σε γενικό αγγλικό \textlatin{sentiment} λειτούργησαν καλύτερα στο \textlatin{MR}, ενώ μοντέλα προσανατολισμένα σε 
+\textlatin{Twitter} δεδομένα λειτούργησαν καλύτερα στο \textlatin{Semeval2017A}. Συνολικά, οι \textlatin{pre-trained Transformers} ξεπέρασαν καθαρά 
+τα μοντέλα που βασίζονται μόνο σε στατικά \textlatin{word embeddings}, δείχνοντας το πλεονέκτημα των βαθύτερων προεκπαιδευμένων αναπαραστάσεων.
 
 \begin{table}[H]
   \centering
