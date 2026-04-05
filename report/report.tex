@@ -425,30 +425,67 @@ L_B = \frac{1}{|B|}\sum_{i \in B} L_i,
 δέχεται ένα διάνυσμα \textlatin{logits} μεγέθους ίσου με το πλήθος των κλάσεων. Έτσι, η επιλογή του \textlatin{loss} συνδέεται άμεσα με τη 
 μορφή του \textlatin{output layer}.
 
-\begin{lstlisting}[caption={Κώδικας επιλογής \textlatin{loss} (\textlatin{main.py})}]
+\selectlanguage{english}
+\begin{lstlisting}[caption={Code for loss selection (main.py)}]
+output_size = 1 if n_classes == 2 else n_classes
+
 if n_classes == 2:
     criterion = torch.nn.BCEWithLogitsLoss()
 else:
     criterion = torch.nn.CrossEntropyLoss()
 \end{lstlisting}
+\selectlanguage{greek}
 
 \paragraph{Παράμετροι προς βελτιστοποίηση:}
 Δεν θέλουμε να εκπαιδεύσουμε όλες τις παραμέτρους του δικτύου, αλλά μόνο εκείνες που έχουν οριστεί ως εκπαιδεύσιμες. Για αυτόν τον λόγο 
 χρησιμοποιούμε φίλτρο πάνω στις παραμέτρους του μοντέλου και κρατάμε μόνο όσες έχουν \textlatin{requires\_grad=True}. Με αυτόν τον τρόπο, 
 αν κάποιο τμήμα του μοντέλου, όπως το \textlatin{embedding layer}, είναι παγωμένο, δεν ενημερώνεται κατά τη βελτιστοποίηση.
 
-\begin{lstlisting}[caption={Κώδικας επιλογής παραμέτρων (\textlatin{main.py})}]
+\selectlanguage{english}
+\begin{lstlisting}[caption={Code for parameter selection (main.py)}]
+model = models[args.model]
+model.to(DEVICE)
+
 parameters = filter(lambda p: p.requires_grad, model.parameters())
 \end{lstlisting}
+\selectlanguage{greek}
 
 \paragraph{\textlatin{Optimizer}:}
 Ως \textlatin{optimizer} χρησιμοποιήσαμε τον \textlatin{Adam} με \textlatin{learning rate} \(10^{-3}\). Ο \textlatin{Adam} είναι κατάλληλη επιλογή, 
 επειδή προσαρμόζει δυναμικά το μέγεθος του βήματος για κάθε παράμετρο και συνήθως οδηγεί σε πιο σταθερή και γρήγορη εκπαίδευση από τον απλό 
-\textlatin{stochastic gradient descent}, ιδιαίτερα σε μικρά και μεσαία \textlatin{deep learning} προβλήματα.
+\textlatin{stochastic gradient descent}, ιδιαίτερα σε μικρά και μεσαία \textlatin{deep learning} προβλήματα. Πιο συγκεκριμένα, αν \(g_t\) είναι η 
+κλίση της συνάρτησης κόστους ως προς μία παράμετρο στη χρονική στιγμή \(t\), ο \textlatin{Adam} υπολογίζει έναν εκθετικά σταθμισμένο μέσο όρο της 
+κλίσης και του τετραγώνου της:
+\[
+m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t
+\]
+\[
+v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2
+\]
+και στη συνέχεια χρησιμοποιεί τις διορθωμένες εκτιμήσεις
+\[
+\hat{m}_t = \frac{m_t}{1-\beta_1^t}, \qquad \hat{v}_t = \frac{v_t}{1-\beta_2^t}
+\]
+ώστε η ενημέρωση της παραμέτρου \(\theta_t\) να δίνεται από:
+\[
+\theta_{t+1} = \theta_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}
+\]
+όπου \(\eta\) είναι το \textlatin{learning rate}. Με αυτόν τον τρόπο, το βήμα ενημέρωσης προσαρμόζεται δυναμικά ανά παράμετρο, κάτι που βελτιώνει 
+τη σταθερότητα και την ταχύτητα σύγκλισης.
 
-\begin{lstlisting}[caption={Κώδικας ορισμού \textlatin{optimizer} (\textlatin{main.py})}]
+\selectlanguage{english}
+\begin{lstlisting}[caption={Code for optimizer definition (main.py)}]
+parameters = filter(lambda p: p.requires_grad, model.parameters())
 optimizer = torch.optim.Adam(parameters, lr=1e-3)
 \end{lstlisting}
+\selectlanguage{greek}
+
+\selectlanguage{english}
+\begin{lstlisting}[caption={Code for freezing the embedding layer (models.py)}]
+self.embedding = nn.Embedding.from_pretrained(torch.FloatTensor(embeddings))
+self.embedding.weight.requires_grad = trainable_emb
+\end{lstlisting}
+\selectlanguage{greek}
 
 \paragraph{Υπερπαράμετροι:}
 \begin{itemize}
@@ -458,19 +495,129 @@ optimizer = torch.optim.Adam(parameters, lr=1e-3)
   \item Άλλες: \textlatin{hidden size}=100
 \end{itemize}
 
+Οι βασικές υπερπαράμετροι που χρησιμοποιήθηκαν είναι \textlatin{learning rate} \(10^{-3}\), \textlatin{batch size} 64, μέγιστος αριθμός εποχών 
+50 και \textlatin{hidden size} 100. Η επιλογή αυτών των τιμών δεν προέκυψε από εξαντλητική αναζήτηση υπερπαραμέτρων, αλλά βασίστηκε κυρίως στη 
+δομή και στις αρχικές ρυθμίσεις του δοθέντος κώδικα της άσκησης, δηλαδή στις προτεινόμενες τιμές του εργαστηρίου, οι οποίες λειτουργούν ως ένα λογικό 
+και σταθερό αρχικό σημείο για την εκπαίδευση.
+
+Πιο συγκεκριμένα, το \textlatin{learning rate} \(10^{-3}\) επιλέχθηκε ως μία κλασική και ασφαλής τιμή για τον \textlatin{Adam}, καθώς είναι συνήθως 
+αρκετά μικρό ώστε να εξασφαλίζει σταθερή σύγκλιση, αλλά και αρκετά μεγάλο ώστε η εκπαίδευση να προχωρά με ικανοποιητική ταχύτητα. 
+Το \textlatin{batch size} 64 αποτελεί έναν πρακτικό συμβιβασμό ανάμεσα στη σταθερότητα της εκτίμησης της κλίσης και στο υπολογιστικό κόστος κάθε 
+βήματος εκπαίδευσης. Ο μέγιστος αριθμός εποχών ορίστηκε σε 50, όχι επειδή αναμέναμε απαραίτητα να ολοκληρωθούν όλες, αλλά ώστε το μοντέλο να έχει 
+επαρκές περιθώριο εκπαίδευσης, ενώ η πραγματική διάρκεια της εκπαίδευσης ελέγχεται από το \textlatin{early stopping} με \textlatin{patience} 5. 
+Με αυτόν τον τρόπο αποφεύγεται τόσο η πρόωρη διακοπή όσο και η άσκοπη συνέχιση της εκπαίδευσης όταν το \textlatin{validation loss} δεν βελτιώνεται 
+πλέον.
+
+Τέλος, το \textlatin{hidden size} 100 χρησιμοποιήθηκε ως μία σχετικά μικρή αλλά επαρκής διάσταση για τον ενδιάμεσο λανθάνοντα χώρο, ώστε το μοντέλο 
+να έχει αρκετή εκφραστική ικανότητα χωρίς να αυξάνεται υπερβολικά ο αριθμός των παραμέτρων. Συνολικά, οι τιμές αυτές επιλέχθηκαν ως πρακτικές και 
+σταθερές ρυθμίσεις βάσης, συμβατές με το μέγεθος του προβλήματος και τις οδηγίες της άσκησης.
+
 \phantomsection
 \subsection*{Ζητούμενο 9 -- Εκπαίδευση}
 \addcontentsline{toc}{subsection}{Ζητούμενο 9 -- Εκπαίδευση}
 
 % Συμπληρώστε τα κενά στις θέσεις training.py:EX9.
 
-Στην \textlatin{train\_dataset}: μεταφορά \textlatin{inputs/labels/lengths} στη συσκευή, \textlatin{optimizer.zero\_grad()}, \textlatin{pred = model(inputs, lengths)}, υπολογισμός \textlatin{loss} (με \textlatin{squeeze} για δυαδική), \textlatin{loss.backward()}, \textlatin{optimizer.step()}.
-Στην \textlatin{eval\_dataset}: ίδια ροή χωρίς \textlatin{backward}, πρόβλεψη με \textlatin{argmax} (πολυκλασική) ή κατώφλι στο 0 (δυαδική), συλλογή \textlatin{y\_pred} και \textlatin{y}.
+Στο στάδιο της εκπαίδευσης υλοποιούνται δύο βασικές συναρτήσεις: η \textlatin{train\_dataset}, η οποία εκτελεί ένα πλήρες πέρασμα εκπαίδευσης 
+πάνω στα \textlatin{mini-batches} μιας εποχής, και η \textlatin{eval\_dataset}, η οποία χρησιμοποιείται για αξιολόγηση χωρίς ενημέρωση βαρών. 
+Στην εκπαίδευση, για κάθε \textlatin{batch} μεταφέρονται τα \textlatin{inputs}, τα \textlatin{labels} και τα \textlatin{lengths} στη σωστή συσκευή, 
+μηδενίζονται οι προηγούμενες κλίσεις με \textlatin{optimizer.zero\_grad()}, εκτελείται το \textlatin{forward pass}, υπολογίζεται το \textlatin{loss} 
+και στη συνέχεια εφαρμόζεται \textlatin{backpropagation}. Αν η συνάρτηση κόστους συμβολιστεί ως \(L(\theta)\), η βασική ενημέρωση των παραμέτρων 
+ακολουθεί το σχήμα
+\[
+\theta \leftarrow \theta - \eta \nabla_\theta L(\theta),
+\]
+όπου \(\eta\) είναι ο ρυθμός μάθησης. Στην πράξη, αυτή η διαδικασία υλοποιείται μέσω των κλήσεων \textlatin{loss.backward()} και 
+\textlatin{optimizer.step()}.
 
-% TODO: Επικολλήστε σύνοψη εκπαίδευσης (π.χ. loss ανά εποχή)
-\begin{lstlisting}[caption={Σύνοψη εκπαίδευσης}]
+Στην αξιολόγηση, η λογική του \textlatin{forward pass} παραμένει ίδια, αλλά η διαδικασία εκτελείται μέσα σε \textlatin{torch.no\_grad()}, ώστε να 
+μην αποθηκεύονται κλίσεις και να μειώνεται το υπολογιστικό κόστος. Για την παραγωγή τελικών προβλέψεων, στην πολυκλασική περίπτωση επιλέγεται η 
+κλάση με το μέγιστο \textlatin{logit}, δηλαδή
+\[
+\hat{y} = \arg\max_c z_c,
+\]
+ενώ στη δυαδική περίπτωση το μοναδικό \textlatin{logit} συγκρίνεται με το μηδέν. Επειδή η \textlatin{sigmoid} ικανοποιεί \(\sigma(0)=0.5\), η 
+συνθήκη \(z>0\) είναι ισοδύναμη με πιθανότητα μεγαλύτερη από \(0.5\). Έτσι, η πρόβλεψη δίνεται από
+\[
+\hat{y} =
+\begin{cases}
+1, & z > 0 \\
+0, & z \leq 0
+\end{cases}
+\]
+Οι προβλέψεις και τα πραγματικά \textlatin{labels} συλλέγονται ώστε να υπολογιστούν στη συνέχεια οι τελικές μετρικές αξιολόγησης.
 
+\selectlanguage{english}
+\begin{lstlisting}[caption={Code for train\_dataset (training.py)}]
+def train_dataset(_epoch, dataloader, model, loss_function, optimizer):
+    model.train()
+    running_loss = 0.0
+
+    device = next(model.parameters()).device
+
+    for index, batch in enumerate(dataloader, 1):
+        inputs, labels, lengths = batch
+
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+        lengths = lengths.to(device)
+
+        optimizer.zero_grad()
+
+        pred = model(inputs, lengths)
+
+        if pred.shape[1] == 1:
+            loss = loss_function(pred.squeeze(1), labels.float())
+        else:
+            loss = loss_function(pred, labels.long())
+
+        loss.backward()
+        optimizer.step()
+
+        running_loss += loss.data.item()
+
+    return running_loss / index
 \end{lstlisting}
+\selectlanguage{greek}
+
+\selectlanguage{english}
+\begin{lstlisting}[caption={Code for eval\_dataset (training.py)}]
+def eval_dataset(dataloader, model, loss_function):
+    model.eval()
+    running_loss = 0.0
+
+    y_pred = []
+    y = []
+
+    device = next(model.parameters()).device
+
+    with torch.no_grad():
+        for index, batch in enumerate(dataloader, 1):
+            inputs, labels, lengths = batch
+
+            inputs = inputs.to(device)
+            labels = labels.to(device)
+            lengths = lengths.to(device)
+
+            pred = model(inputs, lengths)
+
+            if pred.shape[1] == 1:
+                loss = loss_function(pred.squeeze(1), labels.float())
+            else:
+                loss = loss_function(pred, labels.long())
+
+            if pred.shape[1] == 1:
+                y_pred_batch = (pred.squeeze(1) > 0).long()
+            else:
+                _, y_pred_batch = torch.max(pred, dim=1)
+
+            y_pred.append(y_pred_batch.cpu().numpy())
+            y.append(labels.cpu().numpy())
+            running_loss += loss.data.item()
+
+    return running_loss / index, (y_pred, y)
+\end{lstlisting}
+\selectlanguage{greek}
 
 \phantomsection
 \subsection*{Ζητούμενο 10 -- Αξιολόγηση \textlatin{Baseline} Μοντέλου}
@@ -545,7 +692,9 @@ optimizer = torch.optim.Adam(parameters, lr=1e-3)
 
 % Υπολογισμός αναπαράστασης u = [mean(E) || max(E)]
 
-Στο \textlatin{BaselineDNN} με \textlatin{pooling='mean\_max'}: \textlatin{mean\_rep = embeddings.sum(dim=1) / lengths.float().unsqueeze(1)}, \textlatin{max\_rep = embeddings.max(dim=1).values}, \textlatin{representations = torch.cat([mean\_rep, max\_rep], dim=1)}. Το \textlatin{dim} του \textlatin{linear layer} διπλασιάστηκε (\textlatin{dim *= 2}).
+Στο \textlatin{BaselineDNN} με \textlatin{pooling='mean\_max'}: \textlatin{mean\_rep = embeddings.sum(dim=1) / lengths.float().unsqueeze(1)}, 
+\textlatin{max\_rep = embeddings.max(dim=1).values}, \textlatin{representations = torch.cat([mean\_rep, max\_rep], dim=1)}. Το \textlatin{dim} του 
+\textlatin{linear layer} διπλασιάστηκε (\textlatin{dim *= 2}).
 
 \paragraph{1.2 Διαφορές από την αρχική αναπαράσταση:}
 
