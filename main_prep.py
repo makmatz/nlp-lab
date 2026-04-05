@@ -26,7 +26,7 @@ warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 # for example http://nlp.stanford.edu/data/glove.6B.zip
 
 # 1 - point to the pretrained embeddings file (must be in /embeddings folder)
-EMBEDDINGS = os.path.join(EMB_PATH, "glove.twitter.27B.200d.txt")
+EMBEDDINGS = os.path.join(EMB_PATH, "glove.6B.200d.txt")
 
 # 2 - set the correct dimensionality of the embeddings
 EMB_DIM = 200
@@ -34,7 +34,7 @@ EMB_DIM = 200
 EMB_TRAINABLE = False
 BATCH_SIZE = 64
 EPOCHS = 50
-DATASET = "Semeval2017A"  # options: "MR", "Semeval2017A"
+DATASET = "MR" #options: "MR", "Semeval2017A"
 
 # if your computer has a CUDA compatible gpu use it, otherwise use the cpu
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")

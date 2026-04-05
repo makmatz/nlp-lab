@@ -31,6 +31,26 @@
   language=Python
 }
 
+\lstdefinestyle{cleanoutput}{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{blue!4},
+  frame=tb,
+  framerule=0.8pt,
+  rulecolor=\color{blue!30},
+  numbers=none,
+  breaklines=false,
+  keepspaces=true,
+  showstringspaces=false,
+  aboveskip=6pt,
+  belowskip=6pt,
+  xleftmargin=6pt,
+  xrightmargin=6pt,
+  stringstyle=\color{teal!80!black},
+  keywordstyle=\color{blue!70!black},
+  commentstyle=\color{gray!80},
+  language=Python,
+}
+
 \hypersetup{
   colorlinks=true,
   linkcolor=blue,
@@ -99,8 +119,8 @@
 \end{table}
 
 \phantomsection
-\subsection*{Ζητούμενο 2 -- Λεκτική Ανάλυση (\textlatin{Tokenization})}
-\addcontentsline{toc}{subsection}{Ζητούμενο 2 -- Λεκτική Ανάλυση (Tokenization)}
+\subsection*{Ζητούμενο 2 -- Λεκτική Ανάλυση (\foreignlanguage{english}{Tokenization})}
+\addcontentsline{toc}{subsection}{Ζητούμενο 2 -- Λεκτική Ανάλυση (\textlatin{Tokenization})}
 
 Για τη λεκτική ανάλυση χρησιμοποιήσαμε την κλάση \textlatin{SentenceDataset} στο αρχείο \textlatin{dataloading.py}. 
 Στην αρχικοποίηση του \textlatin{Dataset}, κάθε πρόταση του \textlatin{MR} μετατρέπεται σε ακολουθία από \textlatin{tokens} με χρήση 
@@ -108,28 +128,55 @@
 Τα επεξεργασμένα παραδείγματα αποθηκεύονται στη μεταβλητή \textlatin{self.data} της κλάσης, ώστε να είναι διαθέσιμα στα επόμενα στάδια της 
 προεπεξεργασίας.
 
-Τα πρώτα 10 \textlatin{tokenized} παραδείγματα του \textlatin{training set} φαίνονται στον παρακάτω πίνακα.
+Τα πρώτα 10 \textlatin{tokenized} παραδείγματα του \textlatin{training set} φαίνονται παρακάτω.
 
-\begin{table}[H]
-  \centering
-  \caption{Έξοδος Ζητούμενου 2 (\textlatin{dataloading.py:EX2})}
-  \begin{tabular}{cp{0.8\textwidth}}
-    \toprule
-    \textbf{\#} & \textbf{\textlatin{Tokenized example}} \\
-    \midrule
-    0 & \textlatin{the rock is destined to be the 21st century's new " conan " and that he's going to make a splash even greater than arnold schwarzenegger , jean-claud van damme or steven segal .} \\
-    1 & \textlatin{the gorgeously elaborate continuation of " the lord of the rings " trilogy is so huge that a column of words cannot adequately describe co-writer/director peter jackson's expanded vision of j . r . r . tolkien's middle-earth .} \\
-    2 & \textlatin{effective but too-tepid biopic} \\
-    3 & \textlatin{if you sometimes like to go to the movies to have fun , wasabi is a good place to start .} \\
-    4 & \textlatin{emerges as something rare , an issue movie that's so honest and keenly observed that it doesn't feel like one .} \\
-    5 & \textlatin{the film provides some great insight into the neurotic mindset of all comics -- even those who have reached the absolute top of the game .} \\
-    6 & \textlatin{offers that rare combination of entertainment and education .} \\
-    7 & \textlatin{perhaps no picture ever made has more literally showed that the road to hell is paved with good intentions .} \\
-    8 & \textlatin{steers turns in a snappy screenplay that curls at the edges ; it's so clever you want to hate it . but he somehow pulls it off .} \\
-    9 & \textlatin{take care of my cat offers a refreshingly different slice of asian cinema .} \\
-    \bottomrule
-  \end{tabular}
-\end{table}
+\selectlanguage{english}
+\begin{verbatim}
+[0] tokens = ['the', 'rock', 'is', 'destined', 'to', 'be', 'the', '21st',
+              "century's", 'new', '"', 'conan', '"', 'and', 'that', "he's",
+              'going', 'to', 'make', 'a', 'splash', 'even', 'greater', 'than',
+              'arnold', 'schwarzenegger', ',', 'jean-claud', 'van', 'damme',
+              'or', 'steven', 'segal', '.']
+
+[1] tokens = ['the', 'gorgeously', 'elaborate', 'continuation', 'of', '"',
+              'the', 'lord', 'of', 'the', 'rings', '"', 'trilogy', 'is', 'so',
+              'huge', 'that', 'a', 'column', 'of', 'words', 'cannot', 'adequately',
+              'describe', 'co-writer/director', 'peter', "jackson's", 'expanded',
+              'vision', 'of', 'j', '.', 'r', '.', 'r', '.', "tolkien's",
+              'middle-earth', '.']
+
+[2] tokens = ['effective', 'but', 'too-tepid', 'biopic']
+
+[3] tokens = ['if', 'you', 'sometimes', 'like', 'to', 'go', 'to', 'the',
+              'movies', 'to', 'have', 'fun', ',', 'wasabi', 'is', 'a', 'good',
+              'place', 'to', 'start', '.']
+
+[4] tokens = ['emerges', 'as', 'something', 'rare', ',', 'an', 'issue',
+              'movie', "that's", 'so', 'honest', 'and', 'keenly', 'observed',
+              'that', 'it', "doesn't", 'feel', 'like', 'one', '.']
+
+[5] tokens = ['the', 'film', 'provides', 'some', 'great', 'insight', 'into',
+              'the', 'neurotic', 'mindset', 'of', 'all', 'comics', '--', 'even',
+              'those', 'who', 'have', 'reached', 'the', 'absolute', 'top', 'of',
+              'the', 'game', '.']
+
+[6] tokens = ['offers', 'that', 'rare', 'combination', 'of', 'entertainment',
+              'and', 'education', '.']
+
+[7] tokens = ['perhaps', 'no', 'picture', 'ever', 'made', 'has', 'more',
+              'literally', 'showed', 'that', 'the', 'road', 'to', 'hell', 'is',
+              'paved', 'with', 'good', 'intentions', '.']
+
+[8] tokens = ['steers', 'turns', 'in', 'a', 'snappy', 'screenplay', 'that',
+              'curls', 'at', 'the', 'edges', ';', "it's", 'so', 'clever', 'you',
+              'want', 'to', 'hate', 'it', '.', 'but', 'he', 'somehow', 'pulls',
+              'it', 'off', '.']
+
+[9] tokens=['take', 'care', 'of', 'my', 'cat', 'offers', 'a',
+            'refreshingly', 'different', 'slice', 'of', 'asian',
+            'cinema', '.']
+\end{verbatim}
+\selectlanguage{greek}
 
 \phantomsection
 \subsection*{Ζητούμενο 3 -- Κωδικοποίηση Παραδειγμάτων (Λέξεων)}
@@ -153,6 +200,7 @@
 
 Τα πρώτα 5 παραδείγματα στην αρχική τους μορφή και στη μορφή που τα επιστρέφει η κλάση \textlatin{SentenceDataset} έχουν την ακόλουθη δομή.
 
+<<<<<<< HEAD
 \begin{lstlisting}[caption={Έξοδος Ζητούμενου 3 (dataloading.py:EX3)}]
 Original : <phrase 1>
 Encoded  : example=[id_1, id_2, ..., 0, 0], label=1, length=L_1
@@ -169,13 +217,68 @@ Encoded  : example=[id_1, id_2, ..., 0, 0], label=1, length=L_4
 Original : <phrase 5>
 Encoded  : example=[id_1, id_2, ..., 0, 0], label=1, length=L_5
 \end{lstlisting}
+=======
+\selectlanguage{english}
+\begin{verbatim}
+Original : the rock is destined to be the 21st century's new " conan " and
+           that he's going to make a splash even greater than arnold
+           schwarzenegger , jean-claud van damme or steven segal .
+
+Encoded  : [     1,   1138,     15,  10454,      5,     31,      1,
+              5034, 400001,     51,      9,  18513,      9,      6,
+                13, 400001,    223,      5,    160,      8,  16807,
+               152,   1414,     74,   5819,   6681,      2, 400001,
+              1462,  43708,     47,   4412,  26985,      3,      0]
+
+Original : the gorgeously elaborate continuation of " the lord of the rings "
+           trilogy is so huge that a column of words cannot adequately
+           describe co-writer/director peter jackson's expanded vision of
+           j . r . r . tolkien's middle-earth .
+
+Encoded  : [     1,  78616,   5135,  10117,      4,      9,      1,
+              2371,      4,      1,   6820,      9,  12305,     15,
+               101,   1325,     13,      8,   3236,      4,   1375,
+              1120,  12424,   4467, 400001,   1295, 400001,   2853,
+              3139,      4,   6892,      3,   1912,      3,   1912]
+
+Original : effective but too-tepid biopic
+
+Encoded  : [   2038,     35, 400001,  34277,      0,      0,      0,
+                  0,      0,      0,      0,      0,      0,      0,
+                  0,      0,      0,      0,      0,      0,      0,
+                  0,      0,      0,      0,      0,      0,      0,
+                  0,      0,      0,      0,      0,      0,      0]
+
+Original : if you sometimes like to go to the movies to have fun , wasabi
+           is a good place to start .
+
+Encoded  : [    84,     82,   1072,    118,      5,    243,      5,
+                 1,   2460,      5,     34,   2906,      2,  66408,
+                15,      8,    220,    242,      5,    466,      3,
+                 0,      0,      0,      0,      0,      0,      0,
+                 0,      0,      0,      0,      0,      0,      0]
+
+Original : emerges as something rare , an issue movie that's so honest and
+           keenly observed that it doesn't feel like one .
+
+Encoded  : [ 12398,     20,    646,   2349,      2,     30,    496,
+              1006, 400001,    101,   6082,      6,  23499,   4583,
+                13,     21, 400001,    999,    118,     49,      3,
+                 0,      0,      0,      0,      0,      0,      0,
+                 0,      0,      0,      0,      0,      0,      0]
+
+\end{verbatim}
+\selectlanguage{greek}
+>>>>>>> 5fad1712cc5ad73a37a3ae5e5f85ef52b3ba0a41
 
 \phantomsection
 \subsection*{Ζητούμενο 4 -- \textlatin{Embedding Layer}}
-\addcontentsline{toc}{subsection}{Ζητούμενο 4 -- Embedding Layer}
+\addcontentsline{toc}{subsection}{Ζητούμενο 4 -- \textlatin{Embedding Layer}}
 
 % Συμπληρώστε τα κενά στις θέσεις models.py:EX4
 % Απαντήστε στα παρακάτω ερωτήματα:
+
+Ορίσαμε \textlatin{self.embedding = nn.Embedding.from\_pretrained(torch.FloatTensor(embeddings))} για αρχικοποίηση από τα προ-εκπαιδευμένα διανύσματα και θέσαμε \textlatin{self.embedding.weight.requires\_grad = trainable\_emb} για έλεγχο \textlatin{fine-tuning}.
 
 \paragraph{Γιατί αρχικοποιούμε το \textlatin{embedding layer} με τα προ-εκπαιδευμένα \textlatin{word embeddings};}
 
@@ -187,10 +290,12 @@ Encoded  : example=[id_1, id_2, ..., 0, 0], label=1, length=L_5
 
 \phantomsection
 \subsection*{Ζητούμενο 5 -- \textlatin{Output Layer(s)}}
-\addcontentsline{toc}{subsection}{Ζητούμενο 5 -- Output Layer(s)}
+\addcontentsline{toc}{subsection}{Ζητούμενο 5 -- \textlatin{Output Layer(s)}}
 
 % Συμπληρώστε τα κενά στις θέσεις models.py:EX5
 % Απαντήστε στα παρακάτω ερωτήματα:
+
+Ορίσαμε \textlatin{self.linear = nn.Linear(dim, hidden\_size)} και \textlatin{self.relu = nn.ReLU()} ως μη γραμμικό μετασχηματισμό, και \textlatin{self.output = nn.Linear(hidden\_size, output\_size)} ως τελικό \textlatin{layer} ταξινόμησης.
 
 \paragraph{Γιατί βάζουμε μη γραμμική συνάρτηση ενεργοποίησης στο προτελευταίο \textlatin{layer};}
 
@@ -202,10 +307,14 @@ Encoded  : example=[id_1, id_2, ..., 0, 0], label=1, length=L_5
 
 \phantomsection
 \subsection*{Ζητούμενο 6 -- \textlatin{Forward Pass}}
-\addcontentsline{toc}{subsection}{Ζητούμενο 6 -- Forward Pass}
+\addcontentsline{toc}{subsection}{Ζητούμενο 6 -- \textlatin{Forward Pass}}
 
 % Συμπληρώστε τα κενά στις θέσεις models.py:EX6 στη μέθοδο __forward__
 % Απαντήστε στα παρακάτω ερωτήματα:
+
+Στο \textlatin{forward}: (1) \textlatin{embeddings = self.embedding(x)}, (2) αναπαράσταση πρότασης με \textlatin{mean pooling}
+(\textlatin{embeddings.sum(dim=1) / lengths}) ή \textlatin{mean+max} με \textlatin{torch.cat},
+(3) \textlatin{self.relu(self.linear(representations))}, (4) \textlatin{logits = self.output(representations)}.
 
 \paragraph{Διαισθητική ερμηνεία της αναπαράστασης κέντρο-βάρους:}
 
@@ -217,10 +326,12 @@ Encoded  : example=[id_1, id_2, ..., 0, 0], label=1, length=L_5
 
 \phantomsection
 \subsection*{Ζητούμενο 7 -- \textlatin{DataLoaders}}
-\addcontentsline{toc}{subsection}{Ζητούμενο 7 -- DataLoaders}
+\addcontentsline{toc}{subsection}{Ζητούμενο 7 -- \textlatin{DataLoaders}}
 
 % Συμπληρώστε τα κενά στις θέσεις main.py:EX7
 % Απαντήστε στα παρακάτω ερωτήματα:
+
+Ορίσαμε \textlatin{train\_loader = DataLoader(train\_set, batch\_size=BATCH\_SIZE, shuffle=True)} και \textlatin{test\_loader = DataLoader(test\_set, batch\_size=BATCH\_SIZE, shuffle=False)}.
 
 \paragraph{Συνέπειες μικρών και μεγάλων \textlatin{mini-batches} στην εκπαίδευση:}
 
@@ -237,16 +348,16 @@ Encoded  : example=[id_1, id_2, ..., 0, 0], label=1, length=L_5
 % Συμπληρώστε τα κενά στις θέσεις main.py:EX8
 % Αναφέρετε τις επιλογές σας (κριτήριο, παράμετροι, optimizer) και αιτιολογήστε.
 
-\paragraph{Κριτήριο (\textlatin{Loss}):} % TODO: BCEWithLogitsLoss / CrossEntropyLoss -- γιατί;
+\paragraph{Κριτήριο (\textlatin{Loss}):} \textlatin{BCEWithLogitsLoss} για δυαδική ταξινόμηση (\textlatin{MR}, 2 κλάσεις) και \textlatin{CrossEntropyLoss} για πολυκλασική (\textlatin{Semeval2017A}, 3 κλάσεις).
 
-\paragraph{\textlatin{Optimizer}:} % TODO: Adam / Adagrad / RMSProp -- γιατί;
+\paragraph{\textlatin{Optimizer}:} \textlatin{Adam} με \textlatin{lr=1e-3}, χρησιμοποιώντας μόνο τις παραμέτρους με \textlatin{requires\_grad=True} (\textlatin{filter(lambda p: p.requires\_grad, model.parameters())}).
 
 \paragraph{Υπερπαράμετροι:}
 \begin{itemize}
-  \item \textlatin{Learning rate}: % TODO
-  \item \textlatin{Batch size}: % TODO
-  \item Εποχές: % TODO
-  \item Άλλες: % TODO
+  \item \textlatin{Learning rate}: $10^{-3}$
+  \item \textlatin{Batch size}: 64
+  \item Εποχές: έως 50 (με \textlatin{early stopping}, \textlatin{patience}=5)
+  \item Άλλες: \textlatin{hidden size}=100
 \end{itemize}
 
 \phantomsection
@@ -255,13 +366,17 @@ Encoded  : example=[id_1, id_2, ..., 0, 0], label=1, length=L_5
 
 % Συμπληρώστε τα κενά στις θέσεις training.py:EX9.
 
-\begin{lstlisting}[caption={Σύνοψη εκπαίδευσης}]
+Στην \textlatin{train\_dataset}: μεταφορά \textlatin{inputs/labels/lengths} στη συσκευή, \textlatin{optimizer.zero\_grad()}, \textlatin{pred = model(inputs, lengths)}, υπολογισμός \textlatin{loss} (με \textlatin{squeeze} για δυαδική), \textlatin{loss.backward()}, \textlatin{optimizer.step()}.
+Στην \textlatin{eval\_dataset}: ίδια ροή χωρίς \textlatin{backward}, πρόβλεψη με \textlatin{argmax} (πολυκλασική) ή κατώφλι στο 0 (δυαδική), συλλογή \textlatin{y\_pred} και \textlatin{y}.
+
 % TODO: Επικολλήστε σύνοψη εκπαίδευσης (π.χ. loss ανά εποχή)
+\begin{lstlisting}[caption={Σύνοψη εκπαίδευσης}]
+
 \end{lstlisting}
 
 \phantomsection
 \subsection*{Ζητούμενο 10 -- Αξιολόγηση \textlatin{Baseline} Μοντέλου}
-\addcontentsline{toc}{subsection}{Ζητούμενο 10 -- Αξιολόγηση Baseline Μοντέλου}
+\addcontentsline{toc}{subsection}{Ζητούμενο 10 -- Αξιολόγηση \textlatin{Baseline} Μοντέλου}
 
 % Για κάθε ένα από τα 2 datasets, αναφέρετε accuracy, F1-score (macro), recall (macro).
 % Δημιουργήστε γραφικές παραστάσεις training/test loss ανά εποχή.
@@ -287,7 +402,7 @@ Encoded  : example=[id_1, id_2, ..., 0, 0], label=1, length=L_5
 
 \phantomsection
 \subsection*{Ζητούμενο 11 -- Κατηγοριοποίηση με Χρήση \textlatin{LLM}}
-\addcontentsline{toc}{subsection}{Ζητούμενο 11 -- Κατηγοριοποίηση με Χρήση LLM}
+\addcontentsline{toc}{subsection}{Ζητούμενο 11 -- Κατηγοριοποίηση με Χρήση \textlatin{LLM}}
 
 % Επιλέξτε τουλάχιστον 20 κείμενα από κάθε κατηγορία και χρησιμοποιήστε το ChatGPT.
 
@@ -326,11 +441,13 @@ Encoded  : example=[id_1, id_2, ..., 0, 0], label=1, length=L_5
 
 \phantomsection
 \subsection*{Ερώτημα 1 -- \textlatin{Mean + Max Pooling}}
-\addcontentsline{toc}{subsection}{Ερώτημα 1 -- Mean + Max Pooling}
+\addcontentsline{toc}{subsection}{Ερώτημα 1 -- \textlatin{Mean + Max Pooling}}
 
 \paragraph{1.1 Υλοποίηση:}
 
 % Υπολογισμός αναπαράστασης u = [mean(E) || max(E)]
+
+Στο \textlatin{BaselineDNN} με \textlatin{pooling='mean\_max'}: \textlatin{mean\_rep = embeddings.sum(dim=1) / lengths.float().unsqueeze(1)}, \textlatin{max\_rep = embeddings.max(dim=1).values}, \textlatin{representations = torch.cat([mean\_rep, max\_rep], dim=1)}. Το \textlatin{dim} του \textlatin{linear layer} διπλασιάστηκε (\textlatin{dim *= 2}).
 
 \paragraph{1.2 Διαφορές από την αρχική αναπαράσταση:}
 
@@ -374,7 +491,7 @@ Encoded  : example=[id_1, id_2, ..., 0, 0], label=1, length=L_5
 
 \phantomsection
 \subsection*{Ερώτημα 2 -- \textlatin{LSTM}}
-\addcontentsline{toc}{subsection}{Ερώτημα 2 -- LSTM}
+\addcontentsline{toc}{subsection}{Ερώτημα 2 -- \textlatin{LSTM}}
 
 \paragraph{2.1 \textlatin{Validation set \& Early Stopping}:}
 
@@ -431,7 +548,7 @@ Encoded  : example=[id_1, id_2, ..., 0, 0], label=1, length=L_5
 
 \phantomsection
 \subsection*{Ερώτημα 3 -- \textlatin{Self-Attention}}
-\addcontentsline{toc}{subsection}{Ερώτημα 3 -- Self-Attention}
+\addcontentsline{toc}{subsection}{Ερώτημα 3 -- \textlatin{Self-Attention}}
 
 \paragraph{3.1 Υλοποίηση \& Αποτελέσματα (\textlatin{SimpleSelfAttentionModel}):}
 
@@ -506,7 +623,7 @@ q_i = x_i W_Q,\qquad k_i = x_i W_K,\qquad v_i = x_i W_V
 
 \phantomsection
 \subsection*{Ερώτημα 4 -- \textlatin{Multi-Head Attention}}
-\addcontentsline{toc}{subsection}{Ερώτημα 4 -- Multi-Head Attention}
+\addcontentsline{toc}{subsection}{Ερώτημα 4 -- \textlatin{Multi-Head Attention}}
 
 Στο ερώτημα αυτό επεκτείνουμε το απλό \textlatin{self-attention} σε \textlatin{multi-head attention}. Ενώ στο \textlatin{SimpleSelfAttentionModel} 
 υπάρχει μία μόνο κεφαλή προσοχής που υπολογίζει μία ενιαία σταθμισμένη σύνοψη των \textlatin{value vectors}, στο \textlatin{MultiHeadAttentionModel} 
@@ -559,7 +676,7 @@ a_i = \left(\operatorname{head}_i^{(1)} \oplus \operatorname{head}_i^{(2)} \oplu
 
 \phantomsection
 \subsection*{Ερώτημα 5 -- \textlatin{Transformer-Encoder}}
-\addcontentsline{toc}{subsection}{Ερώτημα 5 -- Transformer-Encoder}
+\addcontentsline{toc}{subsection}{Ερώτημα 5 -- \textlatin{Transformer-Encoder}}
 
 % Συμπληρώστε τα κενά στο attention.TransformerEncoderModel
 % Average-pooling για εξαγωγή αναπαράστασης πρότασης
@@ -628,7 +745,7 @@ y = x' + \operatorname{FeedForward}(\operatorname{LayerNorm}(x'))
 
 \phantomsection
 \subsection*{Ερώτημα 6 -- \textlatin{Pre-Trained Transformers (Zero-Shot)}}
-\addcontentsline{toc}{subsection}{Ερώτημα 6 -- Pre-Trained Transformers}
+\addcontentsline{toc}{subsection}{Ερώτημα 6 -- \textlatin{Pre-Trained Transformers}}
 
 Στο ερώτημα αυτό χρησιμοποιήσαμε \textlatin{pre-trained Transformer} μοντέλα σε ρύθμιση \textlatin{zero-shot}, δηλαδή χωρίς επιπλέον εκπαίδευση 
 πάνω στα δεδομένα της άσκησης. Η υλοποίηση έγινε στο αρχείο \textlatin{transfer\_pretrained.py}, όπου για κάθε \textlatin{dataset} φορτώνεται ένα 
@@ -689,7 +806,7 @@ y = x' + \operatorname{FeedForward}(\operatorname{LayerNorm}(x'))
 
 \phantomsection
 \subsection*{Ερώτημα 7 -- \textlatin{Fine-Tuning Pre-Trained Transformers}}
-\addcontentsline{toc}{subsection}{Ερώτημα 7 -- Fine-Tuning Pre-Trained Transformers}
+\addcontentsline{toc}{subsection}{Ερώτημα 7 -- \textlatin{Fine-Tuning Pre-Trained Transformers}}
 
 % Χρησιμοποιήστε finetune_pretrained.py (Google Colab)
 % Τουλάχιστον 3 μοντέλα για κάθε dataset
@@ -728,7 +845,7 @@ y = x' + \operatorname{FeedForward}(\operatorname{LayerNorm}(x'))
 
 \phantomsection
 \subsection*{Ερώτημα 8 -- Διάλογος με \textlatin{ChatGPT} για \textlatin{GPT} Κώδικα}
-\addcontentsline{toc}{subsection}{Ερώτημα 8 -- Διάλογος με ChatGPT}
+\addcontentsline{toc}{subsection}{Ερώτημα 8 -- Διάλογος με \textlatin{ChatGPT}}
 
 % Χρησιμοποιήστε τον κώδικα "Let's build GPT: from scratch, in code, spelled out"
 % Ζητήστε από το ChatGPT: εξήγηση, αξιολόγηση, refactoring

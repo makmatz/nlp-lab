@@ -68,16 +68,10 @@ if __name__ == '__main__':
 
             # training setup
             args = TrainingArguments(
-                output_dir=f"output/{DATASET}/{PRETRAINED_MODEL}",
+                output_dir="output",
                 eval_strategy="epoch",
                 num_train_epochs=3,
-                per_device_train_batch_size=16,
-                per_device_eval_batch_size=32,
-                learning_rate=2e-5,
-                weight_decay=0.01,
-                warmup_ratio=0.1,
-                load_best_model_at_end=True,
-                metric_for_best_model="accuracy",
+                per_device_train_batch_size=32
             )
             trainer = Trainer(
                 model=model,
