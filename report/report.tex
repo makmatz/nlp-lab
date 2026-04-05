@@ -909,16 +909,21 @@ y = x' + \operatorname{FeedForward}(\operatorname{LayerNorm}(x'))
 % Χρησιμοποιήστε finetune_pretrained.py (Google Colab)
 % Τουλάχιστον 3 μοντέλα για κάθε dataset
 
+Για την εκτέλεση του fine-tuning χρησιμοποιήθηκε το \textlatin{Google Colab} με \textlatin{GPU (T4)}.
+Τα τρία μοντέλα (\textlatin{bert-base-cased}, \textlatin{roberta-base}, \textlatin{distilbert-base-uncased})
+εκπαιδεύτηκαν για 3 \textlatin{epochs} με \textlatin{batch size} 32. Λόγω περιορισμών του \textlatin{Trainer API},
+μετρήθηκε μόνο η \textlatin{accuracy} κατά την αξιολόγηση.
+
 \begin{table}[H]
   \centering
-  \caption{Αποτελέσματα \textlatin{Fine-Tuned Transformers} -- \textlatin{Sentence Polarity}}
+  \caption{Αποτελέσματα \textlatin{Fine-Tuned Transformers} -- \textlatin{Sentence Polarity (MR)}}
   \begin{tabular}{lccc}
     \toprule
     \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
     \midrule
-    % TODO: \textlatin{Μοντέλο 1} & -- & -- & -- \\
-    % TODO: \textlatin{Μοντέλο 2} & -- & -- & -- \\
-    % TODO: \textlatin{Μοντέλο 3} & -- & -- & -- \\
+    \textlatin{bert-base-cased}           & 0.8429 & -- & -- \\
+    \textlatin{distilbert-base-uncased}   & 0.8430 & -- & -- \\
+    \textlatin{roberta-base}              & 0.6720 & -- & -- \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -930,16 +935,28 @@ y = x' + \operatorname{FeedForward}(\operatorname{LayerNorm}(x'))
     \toprule
     \textbf{Μοντέλο} & \textbf{\textlatin{Accuracy}} & \textbf{\textlatin{F1 (macro)}} & \textbf{\textlatin{Recall (macro)}} \\
     \midrule
-    % TODO: \textlatin{Μοντέλο 1} & -- & -- & -- \\
-    % TODO: \textlatin{Μοντέλο 2} & -- & -- & -- \\
-    % TODO: \textlatin{Μοντέλο 3} & -- & -- & -- \\
+    \textlatin{roberta-base}              & 0.7040 & -- & -- \\
+    \textlatin{distilbert-base-uncased}   & 0.6839 & -- & -- \\
+    \textlatin{bert-base-cased}           & 0.6775 & -- & -- \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \paragraph{Σχολιασμός αποτελεσμάτων:}
 
-% TODO: Συγκρίνετε zero-shot vs fine-tuned. Ποια μοντέλα απέδωσαν καλύτερα και γιατί;
+Στο \textlatin{MR}, τα \textlatin{fine-tuned} μοντέλα \textlatin{bert-base-cased} και \textlatin{distilbert-base-uncased}
+πέτυχαν \textlatin{accuracy} περίπου 84.3\%, ενώ το \textlatin{roberta-base} υστέρησε σημαντικά (67.2\%), πιθανώς
+λόγω αργής σύγκλισης με τα δεδομένα \textlatin{MR} και τον μικρό αριθμό \textlatin{epochs}.
+Στο \textlatin{Semeval2017A}, το \textlatin{roberta-base} ήταν το καλύτερο (70.4\%), ακολουθούμενο από
+\textlatin{distilbert-base-uncased} (68.4\%) και \textlatin{bert-base-cased} (67.8\%).
+
+Συγκρίνοντας με τα \textlatin{zero-shot} αποτελέσματα του Ερωτήματος 6, παρατηρούμε ότι τα
+\textlatin{fine-tuned} μοντέλα υπολείπονται των καλύτερων \textlatin{zero-shot} μοντέλων: στο \textlatin{MR},
+το \textlatin{siebert/sentiment-roberta-large-english} είχε 92.6\% έναντι 84.3\% των \textlatin{fine-tuned},
+ενώ στο \textlatin{Semeval2017A} η διαφορά είναι μικρότερη (72.4\% \textlatin{zero-shot} έναντι 70.4\% \textlatin{fine-tuned}).
+Αυτό εξηγείται από το γεγονός ότι τα \textlatin{zero-shot} μοντέλα είχαν ήδη εκπαιδευτεί ειδικά για \textlatin{sentiment analysis}
+σε μεγάλα σύνολα δεδομένων, ενώ τα γενικά μοντέλα που χρησιμοποιήθηκαν εδώ για \textlatin{fine-tuning}
+χρειάζονται περισσότερα \textlatin{epochs} ή μεγαλύτερο \textlatin{learning rate scheduling} για να τα ξεπεράσουν.
 
 \phantomsection
 \subsection*{Ερώτημα 8 -- Διάλογος με \textlatin{ChatGPT} για \textlatin{GPT} Κώδικα}
