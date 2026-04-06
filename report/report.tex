@@ -1288,7 +1288,7 @@ y = x' + \operatorname{FeedForward}(\operatorname{LayerNorm}(x'))
 
 Το \textlatin{gpt\_dev.py} είναι ένα εκπαιδευτικό \textlatin{walkthrough}, το οποίο ξεκινά από ένα πολύ απλό
 \textlatin{bigram language model} και καταλήγει σε ένα μικρό \textlatin{decoder-only Transformer} για
-\textlatin{character-level language modeling}. Αρχικά φορτώνει το \textlatin{tinyshakespeare} dataset,
+\textlatin{character-level language modeling}. Αρχικά φορτώνει το \textlatin{tinyshakespeare dataset},
 δημιουργεί λεξιλόγιο χαρακτήρων και αντιστοιχίες \textlatin{character-to-index}. Στη συνέχεια ορίζει ένα πρώτο
 \textlatin{BigramLanguageModel}, στο οποίο η είσοδος \textlatin{idx} έχει σχήμα $(B,T)$ και τα \textlatin{logits}
 που παράγονται έχουν σχήμα $(B,T,\textlatin{vocab\_size})$. Μετά από τα ενδιάμεσα παραδείγματα για
@@ -1392,7 +1392,7 @@ class BigramLanguageModel(nn.Module):
 \end{lstlisting}
 \selectlanguage{greek}
 
-\paragraph{Σύγκριση αρχικού και \textlatin{refactored} run:}
+\paragraph{Σύγκριση αρχικού και \textlatin{refactored run}:}
 
 Για να αξιολογήσουμε αν το \textlatin{refactoring} επηρέασε πρακτικά τη συμπεριφορά του μοντέλου,
 τρέξαμε τόσο την αρχική όσο και τη \textlatin{refactored} εκδοχή του notebook στο \textlatin{Colab},
