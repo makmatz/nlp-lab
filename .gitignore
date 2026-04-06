@@ -1,6 +1,7 @@
 .idea/
 solutions/
 embeddings/
+datasets/
 __pycache__/
 best_model.pt
 
